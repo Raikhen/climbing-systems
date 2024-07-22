@@ -1,46 +1,19 @@
 define problem
-  # Protection { type: Bolt } <-- Example of anonymous object
-
-  Protection p1
-    type: [Cam { size: #2 }]
-
-  Protection p2
-    type: [Bolt]
-
-  Direction d1
-    angle: 40deg
-    length: 5m
-  
-  Direction d2
-    angle: -30deg
-    length: 3m
-  
-  Direction d3
-    angle: 0deg
-    length: 5m
-
-  Protection p3
-    type: [Bolt { with: RapRing }, Bolt { with: RapRing }]
-
   Route lulu
+    name: 'Duet'
     length: 100ft
-    grade: 5.12b
-    flow: [(p1, d1), (p2, d2), (p3, d3)]
-    type: MIXED
-
-  lulu.name = 'Flesh for Lulu'
+    grade: 5.7
+    anchor: [Bolt anchor_bolt1 { with: RapRing }, Bolt anchor_bolt2 { with: RapRing }]
 
   Climber alice
     gear: [
-      Cam { size: #2 },
-      Draw { type: ALPINE },
-      Draw,
-      Draw,
       GriGri,
       DyneemaSling { length: 240cm },
-      Carabiner { type: LOCKING },
-      Carabiner { type: LOCKING },
-      Carabiner { type: LOCKING }
+      Carabiner c1 { type: LOCKING },
+      Carabiner c2 { type: LOCKING },
+      Carabiner c3 { type: LOCKING },
+      Carabiner c4 { type: LOCKING },
+      Carabiner c5 { type: LOCKING }
     ]
 
   Climber bob
@@ -60,9 +33,11 @@ define problem
     with: r1.second_end
     on: bob.harness.hardpoints
 
+  # How the fuck do I model something like a sliding X???
+
   Carabiner alice_clove_carabiner
     type: LOCKING
-    clipped_to: 
+    clipped_to: ... # TODO: Set up the anchor.
 
   # For now, let's assume all climbers have harness, helmet, shoes?
 

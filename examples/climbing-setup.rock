@@ -7,15 +7,15 @@ define lulu_climbing_setup
   Protection p2
     type: [Bolt]
 
-  Direction d1
+  Vector v1
     angle: 40deg
     length: 5m
   
-  Direction d2
+  Vector v2
     angle: -30deg
     length: 3m
   
-  Direction d3
+  Vector v3
     angle: 0deg
     length: 5m
 
@@ -23,9 +23,9 @@ define lulu_climbing_setup
     type: [Bolt { with: RapRing }, Bolt { with: RapRing }]
 
   Route lulu
-    length: 100ft
+    length: 100ft # Shouldn't this be computed from protection?
     grade: 5.12b
-    flow: [(p1, d1), (p2, d2), (p3, d3)]
+    protection: [(p1, v1), (p2, v2), (p3, v3)]
     type: MIXED
 
   lulu.name = 'Flesh for Lulu' # example of modifying attributes

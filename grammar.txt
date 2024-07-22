@@ -6,3 +6,8 @@ Naming conventions
   - Attributes in snake_case?
 
 We want to have a way to declare objects, or scenarios explicitly by hardcoding them.
+
+Perhaps we have mandatory attributes, then attributes of a fixed type,
+and then you can use attributes for anything else yout want just like variables.
+
+I think you still need primitive actions, like pulling from a rope.
