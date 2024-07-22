@@ -4,7 +4,7 @@ grammar Lang;
 
 // block : named_declaration | func_def | func_call;
 
-// LEXER GRAMMAR -> Keywords
+/* LEXER GRAMMAR -> Keywords */
 DEFINE: 'define';
 SET: 'set';
 PROTECTION: 'Protection';
@@ -30,11 +30,14 @@ ACTIVE_SIDE: 'active_side';
 DISTANCE_TO_END: 'distance_to_end';
 LOCKING: 'LOCKING';
 
+// Identifiers
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
+NUMBER: [0-9]+;
+UNIT: 'cm' | 'm' | 'ft' | 'in';
 
 
 yds_grade : YDS_GRADE;
-length : LENGTH;
+length : NUMBER UNIT;
 
 // for ex: set lulu_climbing_setup
 setup: SET ID;
@@ -42,5 +45,4 @@ setup: SET ID;
 // for ex: define lulu_climbing_setup
 DEFINITION: DEFINE ID;
 
-LENGTH : [0-9]+ ('cm' | 'm' | 'ft' | 'in') ;
 YDS_GRADE : ('5.' [0-9] ('+' | '-' | )) | ('5.1' [0-5] ('+' | '-' | [a-d] | )) | '4th' | '3rd';
