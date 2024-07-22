@@ -33,16 +33,22 @@ LOCKING: 'LOCKING';
 // Identifiers
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
 NUMBER: [0-9]+;
-UNIT: 'cm' | 'm' | 'ft' | 'in';
+LENGTHUNIT: 'cm' | 'm' | 'ft' | 'in';
+ANGLEUNIT: 'deg';
+MASSUNIT: 'g' | 'kg';
+YDS_GRADE : ('5.' [0-9] ('+' | '-' | )) | ('5.1' [0-5] ('+' | '-' | [a-d] | )) | '4th' | '3rd';
 
+// Whitespace and comments
+WS: [ \t\r\n]+ -> skip;
+COMMENT: '//' ~[\r\n]* -> skip;
+BLOCKCOMMENT: '/*' .*? '*/' -> skip;
+
+/* PARSER GRAMMAR -> putting it all together */
 
 yds_grade : YDS_GRADE;
 length : NUMBER UNIT;
 
 // for ex: set lulu_climbing_setup
 setup: SET ID;
-
 // for ex: define lulu_climbing_setup
 DEFINITION: DEFINE ID;
-
-YDS_GRADE : ('5.' [0-9] ('+' | '-' | )) | ('5.1' [0-5] ('+' | '-' | [a-d] | )) | '4th' | '3rd';
