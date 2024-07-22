@@ -1,50 +1,45 @@
-define rope_stuck
+define rope_stuck {
 
-  Protection p1
-    type: [Bolt]
+  Protection p1 {type: [Bolt]}
 
-  Protection p2
-    type: [Bolt]
+  Protection p2 {type: [Bolt]}
 
-  Protection p3
-    type: [Bolt]
+  Protection p3 {type: [Bolt]}
 
-  Protection p4
-    type: [Bolt]
+  Protection p4 {type: [Bolt]}
 
-  Vector v1
+  Vector v1 {
     angle: 0deg
     length: 5m
-  
-  Vector v2
+  }
+  Vector v2 {
     angle: 0deg
     length: 5m
-  
-  Vector v3
+  }
+  Vector v3 {
     angle: 0deg
     length: 5m
-
-  Vector v4
+  }
+  Vector v4 {
     angle: 0deg
     length: 5m
-
-  Vector v5
+  }
+  Vector v5 {
     angle: 0deg
     length: 5m
+}
+  Protection p5 {type: [Bolt { with: RapRing }, Bolt { with: RapRing }]}
 
-  Protection p5
-    type: [Bolt { with: RapRing }, Bolt { with: RapRing }]
-
-  Route venus
+  Route venus {
     length: sum(vectors)
     grade: 5.12c
     protection: [(p1, v1), (p2, v2), (p3, v3), (p4, v4), (p5, v5)]
     type: MIXED
     status: Completed
+  }
+  rope_stuck.name = 'Venus on a Halfshell' // example of modifying attributes
 
-  rope_stuck.name = 'Venus on a Halfshell' # example of modifying attributes
-
-  Climber sebastian
+  Climber sebastian {
     gear: [
       Draw,
       Draw,
@@ -55,42 +50,42 @@ define rope_stuck
       Carabiner { type: LOCKING }
     ]
     location: Ground
+  }
+  GriGri dylan_grigri // Just a declaration
 
-  GriGri dylan_grigri
-
-  Climber dylan
+  Climber dylan {
     gear: [
         dylan_grigri,
         dylan_locker]
-
-  Rope rope
+  }
+  Rope rope {
     length: 60m
     rated: SINGLE
-
-  Knot anchor_block
+  }
+  Knot anchor_block {
     type: TANGLE
     with: rope.middle
     on: constriction
-
-  ProPo constriction
+  }
+  ProPo constriction {
     type: Crack
     size: .3
-
-  Knot sebastian_figure8
+  }
+  Knot sebastian_figure8 {
     type: FIGURE_EIGHT_FOLLOW_THROUGH
     with: rope.first_end
     on: sebastian.harness.hardpoints
-
-  Carabiner dylan_locker
+  }
+  Carabiner dylan_locker {
     type: LOCKING
     clipped_to: [dylan.harness.belay_loop, dylan_grigri]
-  
-  Attachment grigri_rope
+  }
+  Attachment grigri_rope {
     device: dylan_grigri
     to: rope
     active_side: rope.first_end
     distance_to_end: rope->length - (2 * venus->length)
-  
-  # Let's assume all climbers have harness, helmet, shoes?
-
-set stuck_rope()
+  }
+  // Let's assume all climbers have harness, helmet, shoes?
+}
+set stuck_rope();
