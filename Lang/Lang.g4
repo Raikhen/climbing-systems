@@ -1,7 +1,6 @@
 grammar Lang;
 
 // file : block EOF;
-
 // block : named_declaration | func_def | func_call;
 
 /* LEXER GRAMMAR -> Keywords */
@@ -43,7 +42,11 @@ WS: [ \t\r\n]+ -> skip;
 COMMENT: '//' ~[\r\n]* -> skip;
 BLOCKCOMMENT: '/*' .*? '*/' -> skip;
 
+
+
 /* PARSER GRAMMAR -> putting it all together */
+start: definition* setup;
+definition: DEFINE ID block;
 
 yds_grade : YDS_GRADE;
 length : NUMBER UNIT;
