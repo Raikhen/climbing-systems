@@ -36,7 +36,7 @@ LENGTH_UNIT: 'cm' | 'm' | 'ft' | 'in';
 ANGLE_UNIT: 'deg';
 MASS_UNIT: 'g' | 'kg';
 YDS_GRADE : ('5.' [0-9] ('+' | '-' | )) | ('5.1' [0-5] ('+' | '-' | [a-d] | )) | '4th' | '3rd';
-FRENCH_GRADE: ;
+FRENCH_GRADE: [123] | [45][abc] | [678][abc] ('+')? | '9'[ab] ('+')? | '9c';
 
 // Whitespace and comments
 WS: [ \t\r\n]+ -> skip;
