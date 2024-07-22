@@ -1,4 +1,8 @@
 define problem
+  AnchorSystem quad
+    type: QUAD
+    using: [Carabiner { type: LOCKING }, Carabiner { type: LOCKING }]
+
   Route lulu
     name: 'Duet'
     length: 100ft
@@ -33,7 +37,7 @@ define problem
     with: r1.second_end
     on: bob.harness.hardpoints
 
-  # How the fuck do I model something like a sliding X???
+  # How the fuck do we model something like a sliding X???
 
   Carabiner alice_clove_carabiner
     type: LOCKING
