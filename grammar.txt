@@ -1,0 +1,7 @@
+Naming conventions
+  - Objects in CamelCaps
+  - Keywords in lowercase (single word)
+  - Variables in snake_case
+  - Constants in ALL_CAPS
+
+We want to have a way to declare objects, or scenarios explicitly by hardcoding them.
