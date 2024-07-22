@@ -1,0 +1,76 @@
+define lulu_climbing_setup
+  # Protection { type: Bolt } <-- Example of anonymous object
+
+  Protection p1
+    type: [Cam { size: #2 }]
+
+  Protection p2
+    type: [Bolt]
+
+  Direction d1
+    angle: 40deg
+    length: 5m
+  
+  Direction d2
+    angle: -30deg
+    length: 3m
+  
+  Direction d3
+    angle: 0deg
+    length: 5m
+
+  Protection p3
+    type: [Bolt { with: RapRing }, Bolt { with: RapRing }]
+
+  Route lulu
+    length: 100ft
+    grade: 5.12b
+    flow: [(p1, d1), (p2, d2), (p3, d3)]
+    type: MIXED
+
+  lulu.name = 'Flesh for Lulu' # example of modifying attributes
+
+  Climber alice
+    gear: [
+      Cam { size: #2 },
+      Draw { type: ALPINE },
+      Draw,
+      Draw,
+      GriGri,
+      DyneemaSling { length: 240cm },
+      Carabiner { type: LOCKING },
+      Carabiner { type: LOCKING },
+      Carabiner { type: LOCKING }
+    ]
+
+  GriGri bobs_grigri
+
+  Climber bob
+    gear: [bobs_grigri]
+
+  Rope rope
+    length: 70m
+    rated: SINGLE
+
+  Knot alice_figure8
+    type: FIGURE_EIGHT_FOLLOW_THROUGH
+    with: rope.first_end
+    on: alice.harness.hardpoints
+
+  Knot barrel
+    type: BARREL
+    with: rope.second_end
+
+  Carabiner belay_locker
+    type: LOCKING
+    clipped_to: [bob.harness.belay_loop, bobs_grigri]
+  
+  Attachment grigri_rope
+    device: bobs_grigri
+    to: rope
+    active_side: rope.first_end
+    distance_to_end: 4m
+
+  # For now, let's assume all climbers have harness, helmet, shoes?
+
+set lulu_climbing_setup
