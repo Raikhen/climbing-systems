@@ -32,10 +32,11 @@ LOCKING: 'LOCKING';
 // Identifiers
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
 NUMBER: [0-9]+;
-LENGTHUNIT: 'cm' | 'm' | 'ft' | 'in';
-ANGLEUNIT: 'deg';
-MASSUNIT: 'g' | 'kg';
+LENGTH_UNIT: 'cm' | 'm' | 'ft' | 'in';
+ANGLE_UNIT: 'deg';
+MASS_UNIT: 'g' | 'kg';
 YDS_GRADE : ('5.' [0-9] ('+' | '-' | )) | ('5.1' [0-5] ('+' | '-' | [a-d] | )) | '4th' | '3rd';
+FRENCH_GRADE: ;
 
 // Whitespace and comments
 WS: [ \t\r\n]+ -> skip;
@@ -49,7 +50,7 @@ start: definition* setup;
 definition: DEFINE ID block;
 
 yds_grade : YDS_GRADE;
-length : NUMBER UNIT;
+length : NUMBER LENGTH_UNIT;
 
 // for ex: set lulu_climbing_setup
 setup: SET ID;
