@@ -1,8 +1,5 @@
 grammar Lang;
 
-// file : block EOF;
-// block : named_declaration | func_def | func_call;
-
 /* LEXER GRAMMAR -> Keywords */
 DEFINE: 'define';
 SET: 'set';
@@ -46,13 +43,34 @@ BLOCKCOMMENT: '/*' .*? '*/' -> skip;
 
 
 /* PARSER GRAMMAR -> putting it all together */
+
+// file : block EOF;
+// block : named_declaration | func_def | func_call;
+
 start: definition* setup;
 definition: DEFINE ID block;
-
-yds_grade : YDS_GRADE;
-length : NUMBER LENGTH_UNIT;
-
 // for ex: set lulu_climbing_setup
 setup: SET ID;
+
+// Blocks and declarations
+block: '{' statement* '}';
+statement: assignment | object_creation | method_call;
+
+assignment: ID '=' expr;
+object_creation: ID '{' property* '}';
+method_call: ID '(' param* ')';
+
+property: (ID ':' expr);
+param: ID ':' expr;
+
+// Expressions
+expr: ID | NUMBER | length | angle | grade | object;
+
+length : NUMBER LENGTH_UNIT;
+angle: NUMBER ANGLE_UNIT;
+grade: YDS_GRADE | FRENCH_GRADE;
+object: ID '{' (property | object_creation)* '}';
+
+
 // for ex: define lulu_climbing_setup
 DEFINITION: DEFINE ID;
