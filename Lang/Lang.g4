@@ -3,10 +3,11 @@ grammar Lang;
 // Main
 file        : block EOF;
 block       : statement* ;
-statement   : declaration | func_def | func_call | assignment ;
+statement   : definition | declaration | func_def | func_call | assignment ;
 
 // Functions
-func_def            : 'define' ID '(' param_list ')' '{' block '}' ;
+definition          : 'define' ID '{' statement* '}';
+func_def            : 'function' ID '(' param_list ')' '{' block '}' ;
 
 func_call           : 'set' ID '(' named_param_list ')';
 
@@ -77,9 +78,8 @@ factors : '*' factor factors
         |
         ;
 factor  : '(' expr ')'
-        | ID
+        | id
         | NUM
-        | CALL
         ;
 /*************************/
 knots       : PROPER_KNOTS
@@ -161,7 +161,6 @@ ANGLE           : '-'? [0-9]+ 'deg' ;
 WEIGHT          : [0-9]+ ('g' | 'kg') ;
 CAM_SIZE        : '.'[1-5] | '.75' | '#'[1-8] ;
 NUM : [0-9]+;
-CALL : [a-z]+ '.' [a-z]+;
 
 // Whitespace and comments
 WS              : (' ' | '\t' | '\n') -> skip ;
