@@ -1,17 +1,32 @@
-define problem
-  AnchorSystem quad
+define problem() {
+  AnchorSystem quad {
     type: QUAD
-    using: [Carabiner { type: LOCKING }, Carabiner { type: LOCKING }]
+    using: [Carabiner c1 { type: LOCKING }, Carabiner c2 { type: LOCKING }]
+  }
 
-  Route lulu
+  Route duet {
     name: 'Duet'
     length: 100ft
     grade: 5.7
-    anchor: [Bolt anchor_bolt1 { with: RapRing }, Bolt anchor_bolt2 { with: RapRing }]
+    anchor: [
+      Bolt anchor_bolt1 { with: RapRing },
+      Bolt anchor_bolt2 { with: RapRing }
+    ]
+  }
 
-  Climber alice
+  Attachment anchor_carabiner1 {
+    device: c1
+    to: anchor_bolt1.with
+  }
+
+  Attachment anchor_carabiner2 {
+    device: c2
+    to: anchor_bolt2.with
+  }
+
+  Climber alice {
     gear: [
-      GriGri,
+      GriGri alice_grigri,
       DyneemaSling { length: 240cm },
       Carabiner c1 { type: LOCKING },
       Carabiner c2 { type: LOCKING },
@@ -19,32 +34,63 @@ define problem
       Carabiner c4 { type: LOCKING },
       Carabiner c5 { type: LOCKING }
     ]
+  }
 
-  Climber bob
+  Climber bob {
     gear: [GriGri]
+  }
 
-  Rope rope
+  Rope rope {
     length: 70m
     rated: SINGLE
+  }
+  
+  Carabiner alice_clove_carabiner {
+    type: LOCKING
+    clipped_to: [quad.masterpoint]
+  }
 
-  Knot alice_figure8
+  Knot alice_clove {
+    type: CLOVE
+    with: r1.at // Can attributes be methods??? I wanna say at 2m
+    on: alice_clove_carabiner
+  }
+
+  Knot alice_figure8 {
     type: FIGURE_EIGHT_FOLLOW_THROUGH
     with: r1.first_end
     on: alice.harness.hardpoints
+  }
 
-  Knot bob_figure8
+  Knot bob_figure8 {
     type: FIGURE_EIGHT_FOLLOW_THROUGH
     with: r1.second_end
     on: bob.harness.hardpoints
+  }
 
-  # How the fuck do we model something like a sliding X???
+  Attachment grigri_rope {
+    device: alice_grigri
+    to: rope.at // 60m
+    active_side: rope.second_end
+  }
 
-  Carabiner alice_clove_carabiner
+  Carabiner belay_locker {
     type: LOCKING
-    clipped_to: ... # TODO: Set up the anchor.
+  }
 
-  # For now, let's assume all climbers have harness, helmet, shoes?
+  Attachment {
+    device: alice_grigri
+    to: belay_locker
+  }
+  
+  Attachment {
+    device: belay_locker
+    to: quad.masterpoint
+  }
+}
 
-set problem
+// Set up the scenario of the problem
+set problem()
 
-# Solution to the problem...
+// Solution to the problem
+// ...

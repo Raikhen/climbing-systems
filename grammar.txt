@@ -11,3 +11,11 @@ Perhaps we have mandatory attributes, then attributes of a fixed type,
 and then you can use attributes for anything else yout want just like variables.
 
 I think you still need primitive actions, like pulling from a rope.
+
+Current problems
+- How to handle ropes. It's not the same to have a rope stacked than to have it hanging, for example.
+
+Decisions
+- Anchor systems will be hardcoded.
+
+Comments are done with // and /* and */
