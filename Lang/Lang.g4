@@ -8,7 +8,6 @@ statement   : declaration | func_def | func_call | assignment ;
 // Functions
 func_def            : 'define' ID '(' param_list ')' '{' block '}' ;
 
-<<<<<<< HEAD
 func_call           : 'set' ID '(' named_param_list ')';
 
 named_param_list    : attribute_pair
@@ -148,47 +147,3 @@ CAM_SIZE        : '.'[1-5] | '.75' | '#'[1-8] ;
 WS              : (' ' | '\t' | '\n') -> skip ;
 COMMENT         : '//' ~[\r\n]* -> skip ;
 BLOCKCOMMENT    : '/*' .*? '*/' -> skip ;
-=======
-/* LEXER GRAMMAR -> Keywords */
-DEFINE: 'define';
-SET: 'set';
-PROTECTION: 'Protection';
-VECTOR: 'Vector';
-ROUTE: 'Route';
-CLIMBER: 'Climber';
-ROPE: 'Rope';
-KNOT: 'Knot';
-CARABINER: 'Carabiner';
-ATTACHMENT: 'Attachment';
-GEAR: 'gear';
-TYPE: 'type';
-ANGLE: 'angle';
-LENGTH: 'length';
-GRADE: 'grade';
-NAME: 'name';
-WITH: 'with';
-ON: 'on';
-TO: 'to';
-CLIPPED_TO: 'clipped_to';
-DEVICE: 'device';
-ACTIVE_SIDE: 'active_side';
-DISTANCE_TO_END: 'distance_to_end';
-LOCKING: 'LOCKING';
-
-// Identifiers
-ID: [a-zA-Z_][a-zA-Z0-9_]*;
-NUMBER: [0-9]+;
-UNIT: 'cm' | 'm' | 'ft' | 'in';
-
-
-yds_grade : YDS_GRADE;
-length : NUMBER UNIT;
-
-// for ex: set lulu_climbing_setup
-setup: SET ID;
-
-// for ex: define lulu_climbing_setup
-DEFINITION: DEFINE ID;
-
-YDS_GRADE : ('5.' [0-9] ('+' | '-' | )) | ('5.1' [0-5] ('+' | '-' | [a-d] | )) | '4th' | '3rd';
->>>>>>> origin/sebwork
