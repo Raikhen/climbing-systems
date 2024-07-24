@@ -1,5 +1,7 @@
 define rope_stuck {
 
+  rope_stuck.name = 'Venus on a Halfshell' // example of modifying attributes
+
   Protection p1 {type: [Bolt]}
 
   Protection p2 {type: [Bolt]}
@@ -28,16 +30,19 @@ define rope_stuck {
     angle: 0deg
     length: 5m
 }
+  Vector v6 {
+    angle: 15deg
+    length: 3m
+}
   Protection p5 {type: [Bolt { with: RapRing }, Bolt { with: RapRing }]}
 
   Route venus {
-    length: sum(vectors)
+    length: sum([v1, v2, v3, v4, v5])
     grade: 5.12c
     protection: [(p1, v1), (p2, v2), (p3, v3), (p4, v4), (p5, v5)]
     type: MIXED
-    status: Completed
+    status: completed
   }
-  rope_stuck.name = 'Venus on a Halfshell' // example of modifying attributes
 
   Climber sebastian {
     gear: [
@@ -47,9 +52,9 @@ define rope_stuck {
       Draw,
       Draw,
       Draw
-      Carabiner { type: LOCKING }
+      carabiner { type: LOCKING }
     ]
-    location: Ground
+    location: ground
   }
   GriGri dylan_grigri // Just a declaration
 
@@ -67,9 +72,10 @@ define rope_stuck {
     with: rope.middle
     on: constriction
   }
-  ProPo constriction {
-    type: Crack
+  Protection constriction {
+    type: crack
     size: .3
+    location: (p3, v6)
   }
   Knot sebastian_figure8 {
     type: FIGURE_EIGHT_FOLLOW_THROUGH
@@ -84,8 +90,8 @@ define rope_stuck {
     device: dylan_grigri
     to: rope
     active_side: rope.first_end
-    distance_to_end: rope->length - (2 * venus->length)
+    distance_to_end: rope.length - 2 * venus.length
   }
   // Let's assume all climbers have harness, helmet, shoes?
 }
-set stuck_rope();
+stuck_rope();

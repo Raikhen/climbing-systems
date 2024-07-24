@@ -3,21 +3,29 @@ grammar Lang;
 // Main
 file        : block EOF;
 block       : statement* ;
-statement   : declaration | func_def | func_call | assignment ;
+statement   : definition | declaration | func_def | func_call | assignment ;
 
 // Functions
-func_def            : 'define' ID '(' param_list ')' '{' block '}' ;
+definition          : 'define' ID '{' statement* '}';
+func_def            : 'function' ID '(' def_param_list? ')' '{' block '}' ;
 
-func_call           : 'set' ID '(' named_param_list ')';
+func_call           : ID '(' mixed_param_list? ')' ;
+
+mixed_param_list    : named_param_list
+                    | param_list
+                    | param_list ',' named_param_list
+                    ;
 
 named_param_list    : attribute_pair
                     | attribute_pair ',' named_param_list
-                    |
                     ;
 
-param_list          : ID
-                    | ID ',' param_list
-                    |
+def_param_list      : ID
+                    | ID ',' def_param_list
+                    ;
+
+param_list          : expr
+                    | expr ',' param_list
                     ;
 
 // Assignment
@@ -34,6 +42,8 @@ expr        : id
             | tuple
             | grade
             | constants
+            | math
+            | func_call
             | LENGTH
             | STRING
             | ANGLE
@@ -63,10 +73,28 @@ constants   : ROUTE_STYLES
             | CARABINER_TYPES
             | knots
             ;
+// Handling for mathematical expressions
+math    : term terms;
+terms   : '+' term terms
+        | '-' term terms
+        |
+        ;
+term    : factor factors;
+factors : '*' factor factors
+        | '/' factor factors
+        | MOD factor factors
+        |
+        ;
+factor  : '(' expr ')'
+        | id
+        | NUM
+        ;
+/*************************/
 
 knots       : PROPER_KNOTS
             | BENDS
             | HITCHES
+            | OTHER
             ;
 
 // Terminals
@@ -134,16 +162,20 @@ HITCHES         : 'CLOVE'
                 | 'MUNTER'
                 ;
 
+OTHER           : 'TANGLE'
+                ;
+
 STRING          : '\'' .*? '\'' ;
 LENGTH          : [0-9]+ ('cm' | 'm' | 'ft' | 'in') ;
 ID              : [a-z] ([a-z] | [0-9] | '_')* ;
 YDS_GRADE       : ('5.' [0-9] ('+' | '-')?) | ('5.1' [0-5] ('+' | '-' | [a-d])?) | '4th' | '3rd' ;
-FRENCH_GRADE    : [123] | [45][abc] | [678][abc] ('+')? | '9'[ab] ('+')? | '9c' ;
+FRENCH_GRADE    : 'FRENCH' ([123] | [45][abc] | [678][abc] ('+')? | '9'[ab] ('+')? | '9c');
 ANGLE           : '-'? [0-9]+ 'deg' ;
 WEIGHT          : [0-9]+ ('g' | 'kg') ;
 CAM_SIZE        : '.'[1-5] | '.75' | '#'[1-8] ;
+NUM : [0-9]+;
 
 // Whitespace and comments
-WS              : (' ' | '\t' | '\n') -> skip ;
+WS              : (' ' | '\t' | '\n' | ';') -> skip ;
 COMMENT         : '//' ~[\r\n]* -> skip ;
 BLOCKCOMMENT    : '/*' .*? '*/' -> skip ;
