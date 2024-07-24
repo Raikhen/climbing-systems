@@ -226,28 +226,32 @@ constants   : ROUTE_STYLES
             | CARABINER_TYPES
             | knots
             ;
-// Handling for mathematical expressions
-math    : term terms;
-terms   : '+' term terms
-        | '-' term terms
-        |
-        ;
-term    : factor factors;
-factors : '*' factor factors
-        | '/' factor factors
-        | MOD factor factors
-        |
-        ;
-factor  : '(' expr ')'
-        | id
-        | NUM
-        ;
-/*************************/
 
 knots       : PROPER_KNOTS
             | BENDS
             | HITCHES
-            | 'TANGLE'
+            | OTHER
+            ;
+
+// Handling of mathematical expressions
+math_expr   : term terms;
+
+terms       : '+' term terms
+            | '-' term terms
+            |
+            ;
+
+term        : factor factors;
+
+factors     : '*' factor factors
+            | '/' factor factors
+            | 'MOD' factor factors
+            |
+            ;
+
+factor      : '(' math_expr ')'
+            | id | LENGTH
+            | NUM
             ;
 
 // Terminals
@@ -315,6 +319,9 @@ HITCHES         : 'CLOVE'
                 | 'MUNTER'
                 ;
 
+OTHER           : 'TANGLE'
+                ;
+
 STRING          : '\'' .*? '\'' ;
 LENGTH          : [0-9]+ ('cm' | 'm' | 'ft' | 'in') ;
 ID              : [a-z] ([a-z] | [0-9] | '_')* ;
@@ -329,7 +336,6 @@ NUM : [0-9]+;
 WS              : (' ' | '\t' | '\n' | ';') -> skip ;
 COMMENT         : '//' ~[\r\n]* -> skip ;
 BLOCKCOMMENT    : '/*' .*? '*/' -> skip ;
-
 ~~~~
 
 Examples
