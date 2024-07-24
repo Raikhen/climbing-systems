@@ -90,7 +90,7 @@ define problem() {
 }
 
 // Set up the scenario of the problem
-set problem()
+problem()
 
 // Solution to the problem
 // ...

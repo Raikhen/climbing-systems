@@ -3,11 +3,10 @@ grammar Lang;
 // Main
 file        : block EOF;
 block       : statement* ;
-statement   : definition | declaration | func_def | func_call | assignment ;
+statement   : declaration | func_def | func_call | assignment ;
 
 // Functions
-definition          : 'define' ID '{' statement* '}';
-func_def            : 'function' ID '(' def_param_list? ')' '{' block '}' ;
+func_def            : 'define' ID '(' def_param_list? ')' '{' block '}' ;
 
 func_call           : ID '(' mixed_param_list? ')' ;
 
@@ -73,28 +72,32 @@ constants   : ROUTE_STYLES
             | CARABINER_TYPES
             | knots
             ;
-// Handling for mathematical expressions
-math    : term terms;
-terms   : '+' term terms
-        | '-' term terms
-        |
-        ;
-term    : factor factors;
-factors : '*' factor factors
-        | '/' factor factors
-        | MOD factor factors
-        |
-        ;
-factor  : '(' expr ')'
-        | id
-        | NUM
-        ;
-/*************************/
 
 knots       : PROPER_KNOTS
             | BENDS
             | HITCHES
             | OTHER
+            ;
+
+// Handling of mathematical expressions
+math_expr   : term terms;
+
+terms       : '+' term terms
+            | '-' term terms
+            |
+            ;
+
+term        : factor factors;
+
+factors     : '*' factor factors
+            | '/' factor factors
+            | 'MOD' factor factors
+            |
+            ;
+
+factor      : '(' math_expr ')'
+            | id | LENGTH
+            | NUM
             ;
 
 // Terminals

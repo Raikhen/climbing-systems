@@ -94,4 +94,5 @@ define rope_stuck {
   }
   // Let's assume all climbers have harness, helmet, shoes?
 }
-stuck_rope();
+
+stuck_rope()

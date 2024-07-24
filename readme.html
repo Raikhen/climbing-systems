@@ -160,18 +160,25 @@ block       : statement* ;
 statement   : declaration | func_def | func_call | assignment ;
 
 // Functions
-func_def            : 'define' ID '(' param_list ')' '{' block '}' ;
+func_def            : 'define' ID '(' def_param_list? ')' '{' block '}' ;
 
-func_call           : 'set' ID '(' named_param_list ')';
+func_call           : ID '(' mixed_param_list? ')' ;
+
+mixed_param_list    : named_param_list
+                    | param_list
+                    | param_list ',' named_param_list
+                    ;
 
 named_param_list    : attribute_pair
                     | attribute_pair ',' named_param_list
-                    |
                     ;
 
-param_list          : ID
-                    | ID ',' param_list
-                    |
+def_param_list      : ID
+                    | ID ',' def_param_list
+                    ;
+
+param_list          : expr
+                    | expr ',' param_list
                     ;
 
 // Assignment
@@ -188,6 +195,8 @@ expr        : id
             | tuple
             | grade
             | constants
+            | math
+            | func_call
             | LENGTH
             | STRING
             | ANGLE
@@ -217,10 +226,28 @@ constants   : ROUTE_STYLES
             | CARABINER_TYPES
             | knots
             ;
+// Handling for mathematical expressions
+math    : term terms;
+terms   : '+' term terms
+        | '-' term terms
+        |
+        ;
+term    : factor factors;
+factors : '*' factor factors
+        | '/' factor factors
+        | MOD factor factors
+        |
+        ;
+factor  : '(' expr ')'
+        | id
+        | NUM
+        ;
+/*************************/
 
 knots       : PROPER_KNOTS
             | BENDS
             | HITCHES
+            | 'TANGLE'
             ;
 
 // Terminals
@@ -292,15 +319,17 @@ STRING          : '\'' .*? '\'' ;
 LENGTH          : [0-9]+ ('cm' | 'm' | 'ft' | 'in') ;
 ID              : [a-z] ([a-z] | [0-9] | '_')* ;
 YDS_GRADE       : ('5.' [0-9] ('+' | '-')?) | ('5.1' [0-5] ('+' | '-' | [a-d])?) | '4th' | '3rd' ;
-FRENCH_GRADE    : [123] | [45][abc] | [678][abc] ('+')? | '9'[ab] ('+')? | '9c' ;
+FRENCH_GRADE    : 'FRENCH' ([123] | [45][abc] | [678][abc] ('+')? | '9'[ab] ('+')? | '9c');
 ANGLE           : '-'? [0-9]+ 'deg' ;
 WEIGHT          : [0-9]+ ('g' | 'kg') ;
 CAM_SIZE        : '.'[1-5] | '.75' | '#'[1-8] ;
+NUM : [0-9]+;
 
 // Whitespace and comments
-WS              : (' ' | '\t' | '\n') -> skip ;
+WS              : (' ' | '\t' | '\n' | ';') -> skip ;
 COMMENT         : '//' ~[\r\n]* -> skip ;
 BLOCKCOMMENT    : '/*' .*? '*/' -> skip ;
+
 ~~~~
 
 Examples
@@ -407,7 +436,7 @@ define lulu_climbing_setup() {
   // For now, let's assume all climbers have harness, helmet, shoes?
 }
 
-set lulu_climbing_setup()
+lulu_climbing_setup()
 ~~~~
 
 A follower is climbing up 
@@ -506,7 +535,7 @@ define problem() {
 }
 
 // Set up the scenario of the problem
-set problem()
+problem()
 
 // Solution to the problem
 // ...
@@ -517,6 +546,8 @@ A rope gets stuck after lowering back to the ground
 
 ~~~~
 define rope_stuck {
+
+  rope_stuck.name = 'Venus on a Halfshell' // example of modifying attributes
 
   Protection p1 {type: [Bolt]}
 
@@ -546,16 +577,19 @@ define rope_stuck {
     angle: 0deg
     length: 5m
 }
+  Vector v6 {
+    angle: 15deg
+    length: 3m
+}
   Protection p5 {type: [Bolt { with: RapRing }, Bolt { with: RapRing }]}
 
   Route venus {
-    length: sum(vectors)
+    length: sum([v1, v2, v3, v4, v5])
     grade: 5.12c
     protection: [(p1, v1), (p2, v2), (p3, v3), (p4, v4), (p5, v5)]
     type: MIXED
-    status: Completed
+    status: completed
   }
-  rope_stuck.name = 'Venus on a Halfshell' // example of modifying attributes
 
   Climber sebastian {
     gear: [
@@ -565,9 +599,9 @@ define rope_stuck {
       Draw,
       Draw,
       Draw
-      Carabiner { type: LOCKING }
+      carabiner { type: LOCKING }
     ]
-    location: Ground
+    location: ground
   }
   GriGri dylan_grigri // Just a declaration
 
@@ -585,9 +619,10 @@ define rope_stuck {
     with: rope.middle
     on: constriction
   }
-  ProPo constriction {
-    type: Crack
+  Protection constriction {
+    type: crack
     size: .3
+    location: (p3, v6)
   }
   Knot sebastian_figure8 {
     type: FIGURE_EIGHT_FOLLOW_THROUGH
@@ -602,11 +637,12 @@ define rope_stuck {
     device: dylan_grigri
     to: rope
     active_side: rope.first_end
-    distance_to_end: rope->length - (2 * venus->length)
+    distance_to_end: rope.length - 2 * venus.length
   }
   // Let's assume all climbers have harness, helmet, shoes?
 }
-set stuck_rope()
+
+stuck_rope()
 ~~~~
 
 <!--   Feel free to modify the following to fit a theme of your choosing   -->

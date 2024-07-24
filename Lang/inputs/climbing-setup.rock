@@ -95,4 +95,4 @@ define lulu_climbing_setup() {
   // For now, let's assume all climbers have harness, helmet, shoes?
 }
 
-set lulu_climbing_setup()
+lulu_climbing_setup()
