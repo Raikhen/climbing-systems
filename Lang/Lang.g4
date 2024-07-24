@@ -41,7 +41,7 @@ expr        : id
             | tuple
             | grade
             | constants
-            | math
+            | math_expr
             | func_call
             | LENGTH
             | STRING
