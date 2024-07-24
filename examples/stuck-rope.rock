@@ -35,11 +35,11 @@ define rope_stuck {
   Protection p5 {type: [Bolt { with: RapRing }, Bolt { with: RapRing }]}
 
   Route venus {
-    length: sum(vectors)
+    length: sum([v1, v2, v3, v4, v5])
     grade: 5.12c
     protection: [(p1, v1), (p2, v2), (p3, v3), (p4, v4), (p5, v5)]
     type: MIXED
-    status: Completed
+    status: completed
   }
   rope_stuck.name = 'Venus on a Halfshell' // example of modifying attributes
 
@@ -51,9 +51,9 @@ define rope_stuck {
       Draw,
       Draw,
       Draw
-      Carabiner { type: LOCKING }
+      carabiner { type: LOCKING }
     ]
-    location: Ground
+    location: ground
   }
   GriGri dylan_grigri // Just a declaration
 
@@ -71,8 +71,8 @@ define rope_stuck {
     with: rope.middle
     on: constriction
   }
-  ProPo constriction {
-    type: Crack
+  Protection constriction {
+    type: crack
     size: .3
     location: (p3, v6)
   }

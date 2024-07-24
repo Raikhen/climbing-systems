@@ -9,7 +9,10 @@ statement   : definition | declaration | func_def | func_call | assignment ;
 definition          : 'define' ID '{' statement* '}';
 func_def            : 'function' ID '(' param_list ')' '{' block '}' ;
 
-func_call           : 'set' ID '(' named_param_list ')';
+func_call           : ID '(' named_param_list ')'
+                    | ID '(' named_param_list ')'
+                    ;
+
 
 named_param_list    : attribute_pair
                     | attribute_pair ',' named_param_list
@@ -36,6 +39,7 @@ expr        : id
             | grade
             | constants
             | math
+            | func_call
             | LENGTH
             | STRING
             | ANGLE
@@ -82,9 +86,11 @@ factor  : '(' expr ')'
         | NUM
         ;
 /*************************/
+
 knots       : PROPER_KNOTS
             | BENDS
             | HITCHES
+            | OTHER
             ;
 
 // Terminals
@@ -152,11 +158,14 @@ HITCHES         : 'CLOVE'
                 | 'MUNTER'
                 ;
 
+OTHER           : 'TANGLE'
+                ;
+
 STRING          : '\'' .*? '\'' ;
 LENGTH          : [0-9]+ ('cm' | 'm' | 'ft' | 'in') ;
 ID              : [a-z] ([a-z] | [0-9] | '_')* ;
 YDS_GRADE       : ('5.' [0-9] ('+' | '-')?) | ('5.1' [0-5] ('+' | '-' | [a-d])?) | '4th' | '3rd' ;
-FRENCH_GRADE    : [123] | [45][abc] | [678][abc] ('+')? | '9'[ab] ('+')? | '9c' ;
+FRENCH_GRADE    : 'FRENCH' ([123] | [45][abc] | [678][abc] ('+')? | '9'[ab] ('+')? | '9c');
 ANGLE           : '-'? [0-9]+ 'deg' ;
 WEIGHT          : [0-9]+ ('g' | 'kg') ;
 CAM_SIZE        : '.'[1-5] | '.75' | '#'[1-8] ;
