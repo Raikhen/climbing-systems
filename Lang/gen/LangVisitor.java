@@ -88,6 +88,12 @@ public interface LangVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitList(LangParser.ListContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link LangParser#tuple}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTuple(LangParser.TupleContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link LangParser#expr_seq}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -100,9 +106,27 @@ public interface LangVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAttribute(LangParser.AttributeContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link LangParser#id}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitId(LangParser.IdContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link LangParser#grade}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitGrade(LangParser.GradeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LangParser#constants}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConstants(LangParser.ConstantsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LangParser#knots}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitKnots(LangParser.KnotsContext ctx);
 }

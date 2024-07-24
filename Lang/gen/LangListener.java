@@ -137,6 +137,16 @@ public interface LangListener extends ParseTreeListener {
 	 */
 	void exitList(LangParser.ListContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link LangParser#tuple}.
+	 * @param ctx the parse tree
+	 */
+	void enterTuple(LangParser.TupleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#tuple}.
+	 * @param ctx the parse tree
+	 */
+	void exitTuple(LangParser.TupleContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link LangParser#expr_seq}.
 	 * @param ctx the parse tree
 	 */
@@ -157,6 +167,16 @@ public interface LangListener extends ParseTreeListener {
 	 */
 	void exitAttribute(LangParser.AttributeContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link LangParser#id}.
+	 * @param ctx the parse tree
+	 */
+	void enterId(LangParser.IdContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#id}.
+	 * @param ctx the parse tree
+	 */
+	void exitId(LangParser.IdContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link LangParser#grade}.
 	 * @param ctx the parse tree
 	 */
@@ -166,4 +186,24 @@ public interface LangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitGrade(LangParser.GradeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LangParser#constants}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstants(LangParser.ConstantsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#constants}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstants(LangParser.ConstantsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LangParser#knots}.
+	 * @param ctx the parse tree
+	 */
+	void enterKnots(LangParser.KnotsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#knots}.
+	 * @param ctx the parse tree
+	 */
+	void exitKnots(LangParser.KnotsContext ctx);
 }

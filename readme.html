@@ -147,6 +147,378 @@ a diagram that depicts the final scenario.
 The output will be determined by processing each "primitive" action one by one.
 By primitive action we mean actions that are not composed of other actions.
 
+
+Grammar
+================
+
+~~~~
+grammar Lang;
+
+// Main
+file        : block EOF;
+block       : statement* ;
+statement   : declaration | func_def | func_call | assignment ;
+
+// Functions
+func_def            : 'define' ID '(' param_list ')' '{' block '}' ;
+
+func_call           : 'set' ID '(' named_param_list ')';
+
+named_param_list    : attribute_pair
+                    | attribute_pair ',' named_param_list
+                    |
+                    ;
+
+param_list          : ID
+                    | ID ',' param_list
+                    |
+                    ;
+
+// Assignment
+assignment      : id '=' expr;
+declaration     : CLASS ID? ('{' attribute_list '}')? ;
+attribute_list  : attribute_pair* ;
+attribute_pair  : attribute ':' expr;
+
+// Expressions and identifiers
+expr        : id
+            | declaration
+            | (declaration '.' attribute)
+            | list
+            | tuple
+            | grade
+            | constants
+            | LENGTH
+            | STRING
+            | ANGLE
+            | CAM_SIZE
+            ;
+
+list        : '[' expr_seq ']';
+tuple       : '(' expr_seq ')';
+
+expr_seq    : expr
+            | expr ',' expr_seq
+            |
+            ;
+
+attribute   : ID;
+
+id          : ID
+            | ID '.' id
+            ;
+
+grade       : YDS_GRADE | FRENCH_GRADE ;
+
+constants   : ROUTE_STYLES
+            | ROPE_RATINGS
+            | ANCHOR_SYSTEMS
+            | DRAW_TYPES
+            | CARABINER_TYPES
+            | knots
+            ;
+
+knots       : PROPER_KNOTS
+            | BENDS
+            | HITCHES
+            ;
+
+// Terminals
+CLASS           : 'Rope'
+                | 'Route'
+                | 'Attachment'
+                | 'Climber'
+                | 'Knot'
+                | 'Carabiner'
+                | 'GriGri'
+                | 'Vector'
+                | 'ProPossibility'
+                | 'Protection'
+                | 'Bolt'
+                | 'RapRing'
+                | 'Cam'
+                | 'Draw'
+                | 'DyneemaSling'
+                | 'AnchorSystem'
+                ;
+
+ROUTE_STYLES    : 'MIXED' // Both trad and sport, no ice stuff for now
+                | 'TRAD'
+                | 'SPORT'
+                ;
+
+ROPE_RATINGS    : 'SINGLE'
+                | 'TAG_LINE'
+                | 'HALF'
+                | 'TWIN'
+                | 'DOUBLE' // Both half and twin?
+                ;
+
+ANCHOR_SYSTEMS  : 'QUAD'
+                | 'SLIDING_X'
+                | 'W_ANCHOR' // Is there a better name?
+                ;
+
+DRAW_TYPES      : 'SPORT_DRAW'
+                | 'ALPINE_DRAW'
+                ;
+
+CARABINER_TYPES : 'LOCKING'
+                | 'NON-LOCKING'
+                ;
+
+PROPER_KNOTS    : 'BARREL'
+                | 'OVERHAND_ON_A_BIGHT'
+                | 'FIGURE_EIGHT_ON_A_BIGHT'
+                | 'FIGURE_EIGHT_FOLLOW_THROUGH'
+                | 'BUTTERFLY'
+                | 'MUNTER_MULE_OVERHAND'
+                ;
+
+BENDS           : 'DOUBLE_FISHERMAN'
+                | 'TRIPLE_FISHERMAN'
+                | 'FLAT_OVERHAND'
+                | 'FLEMISH'
+                ;
+
+HITCHES         : 'CLOVE'
+                | 'PRUSIK'
+                | 'AUTOBLOCK'
+                | 'KLEMHEIST'
+                | 'MUNTER'
+                ;
+
+STRING          : '\'' .*? '\'' ;
+LENGTH          : [0-9]+ ('cm' | 'm' | 'ft' | 'in') ;
+ID              : [a-z] ([a-z] | [0-9] | '_')* ;
+YDS_GRADE       : ('5.' [0-9] ('+' | '-')?) | ('5.1' [0-5] ('+' | '-' | [a-d])?) | '4th' | '3rd' ;
+FRENCH_GRADE    : [123] | [45][abc] | [678][abc] ('+')? | '9'[ab] ('+')? | '9c' ;
+ANGLE           : '-'? [0-9]+ 'deg' ;
+WEIGHT          : [0-9]+ ('g' | 'kg') ;
+CAM_SIZE        : '.'[1-5] | '.75' | '#'[1-8] ;
+
+// Whitespace and comments
+WS              : (' ' | '\t' | '\n') -> skip ;
+COMMENT         : '//' ~[\r\n]* -> skip ;
+BLOCKCOMMENT    : '/*' .*? '*/' -> skip ;
+~~~~
+
+Examples
+================
+
+Setting up the scenario to go climbing
+--------------------------------
+
+~~~~
+define lulu_climbing_setup() {
+  // Protection { type: Bolt } <-- Example of anonymous object
+
+  Protection p1 {
+    type: [Cam { size: #2 }]
+  }
+
+  Protection p2 {
+    type: [Bolt]
+  }
+
+  Vector v1 {
+    angle: 40deg
+    length: 5m
+  }
+
+  Vector v2 {
+    angle: -30deg
+    length: 3m
+  }
+
+  Vector v3 {
+    angle: 0deg
+    length: 5m
+  }
+
+  Protection p3 {
+    type: [
+      Bolt {
+        with: RapRing
+      },
+      Bolt {
+        with: RapRing
+      }
+    ]
+  }
+
+  Route lulu {
+    length: 100ft // Shouldn't this be computed from protection?
+    grade: 5.12b
+    protection: [(p1, v1), (p2, v2), (p3, v3)]
+    type: MIXED
+  }
+
+  lulu.name = 'Flesh for Lulu' // example of modifying attributes
+
+  Climber alice {
+    gear: [
+      Cam { size: #2 },
+      Draw { type: ALPINE_DRAW },
+      Draw,
+      Draw,
+      GriGri,
+      DyneemaSling { length: 240cm },
+      Carabiner { type: LOCKING },
+      Carabiner { type: LOCKING },
+      Carabiner { type: LOCKING }
+    ]
+  }
+
+  GriGri bobs_grigri
+
+  Climber bob {
+    gear: [bobs_grigri]
+  }
+
+  Rope rope {
+    length: 70m
+    rated: SINGLE
+  }
+
+  Knot alice_figure8 {
+    type: FIGURE_EIGHT_FOLLOW_THROUGH
+    with: rope.first_end
+    on: alice.harness.hardpoints
+  }
+
+  Knot barrel {
+    type: BARREL
+    with: rope.second_end
+  }
+
+  Carabiner belay_locker {
+    type: LOCKING
+    clipped_to: [bob.harness.belay_loop, bobs_grigri]
+  }
+
+  Attachment grigri_rope {
+    device: bobs_grigri
+    to: rope
+    active_side: rope.first_end
+    distance_to_end: 4m
+  }
+
+  // For now, let's assume all climbers have harness, helmet, shoes?
+}
+
+set lulu_climbing_setup()
+~~~~
+
+A follower is climbing up 
+--------------------------------
+
+~~~~
+define problem() {
+  AnchorSystem quad {
+    type: QUAD
+    using: [Carabiner c1 { type: LOCKING }, Carabiner c2 { type: LOCKING }]
+  }
+
+  Route duet {
+    name: 'Duet'
+    length: 100ft
+    grade: 5.7
+    anchor: [
+      Bolt anchor_bolt1 { with: RapRing },
+      Bolt anchor_bolt2 { with: RapRing }
+    ]
+  }
+
+  Attachment anchor_carabiner1 {
+    device: c1
+    to: anchor_bolt1.with
+  }
+
+  Attachment anchor_carabiner2 {
+    device: c2
+    to: anchor_bolt2.with
+  }
+
+  Climber alice {
+    gear: [
+      GriGri alice_grigri,
+      DyneemaSling { length: 240cm },
+      Carabiner c1 { type: LOCKING },
+      Carabiner c2 { type: LOCKING },
+      Carabiner c3 { type: LOCKING },
+      Carabiner c4 { type: LOCKING },
+      Carabiner c5 { type: LOCKING }
+    ]
+  }
+
+  Climber bob {
+    gear: [GriGri]
+  }
+
+  Rope rope {
+    length: 70m
+    rated: SINGLE
+  }
+
+  Carabiner alice_clove_carabiner {
+    type: LOCKING
+    clipped_to: [quad.masterpoint]
+  }
+
+  Knot alice_clove {
+    type: CLOVE
+    with: r1.at // Can attributes be methods??? I wanna say at 2m
+    on: alice_clove_carabiner
+  }
+
+  Knot alice_figure8 {
+    type: FIGURE_EIGHT_FOLLOW_THROUGH
+    with: r1.first_end
+    on: alice.harness.hardpoints
+  }
+
+  Knot bob_figure8 {
+    type: FIGURE_EIGHT_FOLLOW_THROUGH
+    with: r1.second_end
+    on: bob.harness.hardpoints
+  }
+
+  Attachment grigri_rope {
+    device: alice_grigri
+    to: rope.at // 60m
+    active_side: rope.second_end
+  }
+
+  Carabiner belay_locker {
+    type: LOCKING
+  }
+
+  Attachment {
+    device: alice_grigri
+    to: belay_locker
+  }
+
+  Attachment {
+    device: belay_locker
+    to: quad.masterpoint
+  }
+}
+
+// Set up the scenario of the problem
+set problem()
+
+// Solution to the problem
+// ...
+~~~~
+
+A rope gets stuck after lowering back to the ground
+--------------------------------
+
+~~~~
+...
+~~~~
+
 <!--   Feel free to modify the following to fit a theme of your choosing   -->
 <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet"> <!-- a sans-serif font -->
 <style>  /* A TAYLOR-INSPIRED THEME */
