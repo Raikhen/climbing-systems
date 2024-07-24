@@ -34,6 +34,7 @@ expr        : id
             | tuple
             | grade
             | constants
+            | math
             | LENGTH
             | STRING
             | ANGLE
@@ -63,7 +64,24 @@ constants   : ROUTE_STYLES
             | CARABINER_TYPES
             | knots
             ;
-
+// Handling for mathematical expressions
+math    : term terms;
+terms   : '+' term terms
+        | '-' term terms
+        |
+        ;
+term    : factor factors;
+factors : '*' factor factors
+        | '/' factor factors
+        | MOD factor factors
+        |
+        ;
+factor  : '(' expr ')'
+        | ID
+        | NUM
+        | CALL
+        ;
+/*************************/
 knots       : PROPER_KNOTS
             | BENDS
             | HITCHES
@@ -142,8 +160,11 @@ FRENCH_GRADE    : [123] | [45][abc] | [678][abc] ('+')? | '9'[ab] ('+')? | '9c' 
 ANGLE           : '-'? [0-9]+ 'deg' ;
 WEIGHT          : [0-9]+ ('g' | 'kg') ;
 CAM_SIZE        : '.'[1-5] | '.75' | '#'[1-8] ;
+NUM : [0-9]+;
+CALL : [a-z]+ '.' [a-z]+;
 
 // Whitespace and comments
 WS              : (' ' | '\t' | '\n') -> skip ;
 COMMENT         : '//' ~[\r\n]* -> skip ;
 BLOCKCOMMENT    : '/*' .*? '*/' -> skip ;
+MOD : 'MOD';
