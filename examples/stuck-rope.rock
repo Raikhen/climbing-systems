@@ -1,5 +1,7 @@
 define rope_stuck {
 
+  rope_stuck.name = 'Venus on a Halfshell' // example of modifying attributes
+
   Protection p1 {type: [Bolt]}
 
   Protection p2 {type: [Bolt]}
@@ -41,7 +43,6 @@ define rope_stuck {
     type: MIXED
     status: completed
   }
-  rope_stuck.name = 'Venus on a Halfshell' // example of modifying attributes
 
   Climber sebastian {
     gear: [
@@ -93,4 +94,4 @@ define rope_stuck {
   }
   // Let's assume all climbers have harness, helmet, shoes?
 }
-set stuck_rope();
+stuck_rope();

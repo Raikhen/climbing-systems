@@ -7,21 +7,25 @@ statement   : definition | declaration | func_def | func_call | assignment ;
 
 // Functions
 definition          : 'define' ID '{' statement* '}';
-func_def            : 'function' ID '(' param_list ')' '{' block '}' ;
+func_def            : 'function' ID '(' def_param_list? ')' '{' block '}' ;
 
-func_call           : ID '(' named_param_list ')'
-                    | ID '(' named_param_list ')'
+func_call           : ID '(' mixed_param_list? ')' ;
+
+mixed_param_list    : named_param_list
+                    | param_list
+                    | param_list ',' named_param_list
                     ;
-
 
 named_param_list    : attribute_pair
                     | attribute_pair ',' named_param_list
-                    |
                     ;
 
-param_list          : ID
-                    | ID ',' param_list
-                    |
+def_param_list      : ID
+                    | ID ',' def_param_list
+                    ;
+
+param_list          : expr
+                    | expr ',' param_list
                     ;
 
 // Assignment
@@ -172,7 +176,7 @@ CAM_SIZE        : '.'[1-5] | '.75' | '#'[1-8] ;
 NUM : [0-9]+;
 
 // Whitespace and comments
-WS              : (' ' | '\t' | '\n') -> skip ;
+WS              : (' ' | '\t' | '\n' | ';') -> skip ;
 COMMENT         : '//' ~[\r\n]* -> skip ;
 BLOCKCOMMENT    : '/*' .*? '*/' -> skip ;
 MOD : 'MOD';
