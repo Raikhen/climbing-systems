@@ -1,0 +1,7 @@
+// Object assignment
+
+my_var = 3
+
+my_var = Route {
+    name: 'Meltdown'
+}

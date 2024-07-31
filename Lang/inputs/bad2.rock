@@ -1,0 +1,4 @@
+Route {
+    name: 'Anonymous'
+    fake_attribute: conventionsMatterInThisWorld
+}

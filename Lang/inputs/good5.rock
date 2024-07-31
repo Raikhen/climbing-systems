@@ -1,0 +1,6 @@
+Vector v1 {
+    angle: 5m
+    length: 40deg
+}
+
+// Syntactically allowed

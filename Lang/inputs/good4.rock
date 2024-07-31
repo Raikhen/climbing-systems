@@ -1,0 +1,12 @@
+w = FRENCH 6a
+
+x = 5.12b
+
+y = 5m
+
+z = SINGLE
+
+x.y.z = 3
+
+// This is syntactically valid despite being semantic non-sense
+// (considering that x is a climbing grade)

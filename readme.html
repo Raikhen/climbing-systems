@@ -10,7 +10,6 @@ Author
 ------------------|-------------
 name              | Dylan Fridman
 computer + OS     | MacBook Air, macOS Sonoma
-time to complete  | 3 hours
 partner           | Sebastian Frazier, Javier Rodillas, Walker Ball
 </div>
 
@@ -649,6 +648,120 @@ define rope_stuck {
 }
 
 stuck_rope()
+~~~~
+
+Examples
+================
+
+Good 1
+--------------------------------
+
+~~~~
+Route {
+  name: 'Anonymous'
+  fakeAttribute: fakeIdentifier
+}
+~~~~
+
+Good 2
+--------------------------------
+
+~~~~
+// Nested functions!
+
+define fn() {
+    define other_fn() {
+        Route r
+    }
+}
+~~~~
+
+Good 3
+--------------------------------
+
+~~~~
+// Object assignment
+
+my_var = 3
+
+my_var = Route {
+    name: 'Meltdown'
+}
+~~~~
+
+Good 4
+--------------------------------
+
+~~~~
+w = FRENCH 6a
+
+x = 5.12b
+
+y = 5m
+
+z = SINGLE
+
+x.y.z = 3
+
+// This is syntactically valid despite being semantic non-sense
+// (considering that x is a climbing grade)
+~~~~
+
+Good 5
+--------------------------------
+
+~~~~
+Vector v1 {
+  angle: 5m
+  length: 40deg
+}
+
+// Syntactically allowed
+~~~~
+
+Bad 1
+--------------------------------
+
+~~~~
+FakeClass {
+  test: 'test';
+}
+~~~~
+
+Bad 2
+--------------------------------
+
+~~~~
+Route {
+  name: 'Anonymous'
+  fake_attribute: conventionsMatterInThisWorld
+}
+~~~~
+
+Bad 3
+--------------------------------
+
+~~~~
+y = 4m + 2m
+x = 30deg + 4m
+~~~~
+
+Bad 4
+--------------------------------
+
+~~~~
+x = [[[]], (())]
+
+y = []][[] // non-sense
+~~~~
+
+Bad 5
+--------------------------------
+
+~~~~
+too_hard = 5.16a
+same_thing = FRENCH 9c+
+too_easy = 2nd
 ~~~~
 
 <!--   Feel free to modify the following to fit a theme of your choosing   -->

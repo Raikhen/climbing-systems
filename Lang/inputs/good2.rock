@@ -1,0 +1,7 @@
+// Nested functions!
+
+define fn() {
+    define other_fn() {
+        Route r
+    }
+}
