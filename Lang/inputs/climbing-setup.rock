@@ -89,7 +89,7 @@ define lulu_climbing_setup() {
     device: bobs_grigri
     to: rope
     active_side: rope.first_end
-    distance_to_end: 2 * 4m
+    distance_to_end: 2 * 4m + test_var
   }
 
   // For now, let's assume all climbers have harness, helmet, shoes?

@@ -143,7 +143,14 @@ public class LangBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements L
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitId(LangParser.IdContext ctx) { return visitChildren(ctx); }
+	@Override public T visitRef(LangParser.RefContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitRef_val(LangParser.Ref_valContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -192,7 +199,7 @@ public class LangBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements L
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitFactors(LangParser.FactorsContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFactors(LangParser.FactorsContext ctx) throws Exception { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

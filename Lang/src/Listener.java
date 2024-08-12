@@ -3,7 +3,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class Listener extends LangBaseListener {
     public static void main(String[] args) throws Exception {
-        CharStream test = CharStreams.fromFileName("Lang/inputs/climbing-setup.rock");
+        CharStream test = CharStreams.fromFileName("inputs/climbing-setup.rock");
         LangLexer lexer = new LangLexer(test);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         LangParser parser = new LangParser(tokens);

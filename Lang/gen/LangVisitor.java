@@ -118,11 +118,17 @@ public interface LangVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAttribute(LangParser.AttributeContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LangParser#id}.
+	 * Visit a parse tree produced by {@link LangParser#ref}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitId(LangParser.IdContext ctx);
+	T visitRef(LangParser.RefContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LangParser#ref_val}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRef_val(LangParser.Ref_valContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link LangParser#grade}.
 	 * @param ctx the parse tree
@@ -164,7 +170,7 @@ public interface LangVisitor<T> extends ParseTreeVisitor<T> {
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFactors(LangParser.FactorsContext ctx);
+	T visitFactors(LangParser.FactorsContext ctx) throws Exception;
 	/**
 	 * Visit a parse tree produced by {@link LangParser#factor}.
 	 * @param ctx the parse tree

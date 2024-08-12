@@ -25,6 +25,11 @@ public class Length {
         }
     }
 
+    public Length multiplyBy(double x) {
+        length *= x;
+        return this;
+    }
+
     public static void main(String[] args) {
         Length test = new Length("4 ft");
     }

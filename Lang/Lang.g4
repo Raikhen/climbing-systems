@@ -28,13 +28,13 @@ param_list          : expr
                     ;
 
 // Assignment
-assignment      : id '=' expr;
+assignment      : ref '=' expr ;
 declaration     : CLASS ID? ('{' attribute_list '}')? ;
 attribute_list  : attribute_pair* ;
-attribute_pair  : attribute ':' expr;
+attribute_pair  : attribute ':' expr ;
 
 // Expressions and identifiers
-expr        : id
+expr        : ref_val
             | declaration
             | (declaration '.' attribute)
             | list
@@ -49,8 +49,8 @@ expr        : id
             | CAM_SIZE
             ;
 
-list        : '[' expr_seq ']';
-tuple       : '(' expr_seq ')';
+list        : '[' expr_seq ']' ;
+tuple       : '(' expr_seq ')' ;
 
 expr_seq    : expr
             | expr ',' expr_seq
@@ -59,9 +59,11 @@ expr_seq    : expr
 
 attribute   : ID;
 
-id          : ID
-            | ID '.' id
+ref         : ID
+            | ID '.' ref
             ;
+
+ref_val     : ref ;
 
 grade       : YDS_GRADE | FRENCH_GRADE ;
 
@@ -91,12 +93,11 @@ term        : factor factors;
 
 factors     : '*' factor factors
             | '/' factor factors
-            | 'MOD' factor factors
             |
             ;
 
 factor      : '(' math_expr ')'
-            | id | LENGTH
+            | ref_val | LENGTH
             | NUM
             ;
 
