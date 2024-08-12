@@ -40,11 +40,23 @@ public interface LangVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunc_call(LangParser.Func_callContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link LangParser#mixed_param_list}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMixed_param_list(LangParser.Mixed_param_listContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link LangParser#named_param_list}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitNamed_param_list(LangParser.Named_param_listContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LangParser#def_param_list}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDef_param_list(LangParser.Def_param_listContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link LangParser#param_list}.
 	 * @param ctx the parse tree
@@ -129,4 +141,34 @@ public interface LangVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitKnots(LangParser.KnotsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LangParser#math_expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMath_expr(LangParser.Math_exprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LangParser#terms}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTerms(LangParser.TermsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LangParser#term}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTerm(LangParser.TermContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LangParser#factors}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFactors(LangParser.FactorsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LangParser#factor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFactor(LangParser.FactorContext ctx);
 }

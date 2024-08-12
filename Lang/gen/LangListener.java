@@ -57,6 +57,16 @@ public interface LangListener extends ParseTreeListener {
 	 */
 	void exitFunc_call(LangParser.Func_callContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link LangParser#mixed_param_list}.
+	 * @param ctx the parse tree
+	 */
+	void enterMixed_param_list(LangParser.Mixed_param_listContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#mixed_param_list}.
+	 * @param ctx the parse tree
+	 */
+	void exitMixed_param_list(LangParser.Mixed_param_listContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link LangParser#named_param_list}.
 	 * @param ctx the parse tree
 	 */
@@ -66,6 +76,16 @@ public interface LangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNamed_param_list(LangParser.Named_param_listContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LangParser#def_param_list}.
+	 * @param ctx the parse tree
+	 */
+	void enterDef_param_list(LangParser.Def_param_listContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#def_param_list}.
+	 * @param ctx the parse tree
+	 */
+	void exitDef_param_list(LangParser.Def_param_listContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LangParser#param_list}.
 	 * @param ctx the parse tree
@@ -206,4 +226,54 @@ public interface LangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitKnots(LangParser.KnotsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LangParser#math_expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterMath_expr(LangParser.Math_exprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#math_expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitMath_expr(LangParser.Math_exprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LangParser#terms}.
+	 * @param ctx the parse tree
+	 */
+	void enterTerms(LangParser.TermsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#terms}.
+	 * @param ctx the parse tree
+	 */
+	void exitTerms(LangParser.TermsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LangParser#term}.
+	 * @param ctx the parse tree
+	 */
+	void enterTerm(LangParser.TermContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#term}.
+	 * @param ctx the parse tree
+	 */
+	void exitTerm(LangParser.TermContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LangParser#factors}.
+	 * @param ctx the parse tree
+	 */
+	void enterFactors(LangParser.FactorsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#factors}.
+	 * @param ctx the parse tree
+	 */
+	void exitFactors(LangParser.FactorsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LangParser#factor}.
+	 * @param ctx the parse tree
+	 */
+	void enterFactor(LangParser.FactorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#factor}.
+	 * @param ctx the parse tree
+	 */
+	void exitFactor(LangParser.FactorContext ctx);
 }

@@ -1,6 +1,6 @@
 grammar Lang;
 
-// Main
+// Listener
 file        : block EOF;
 block       : statement* ;
 statement   : declaration | func_def | func_call | assignment ;
