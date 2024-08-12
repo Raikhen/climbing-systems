@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 public class Visitor extends LangBaseVisitor {
     private Dictionary<String, Object> variables = new Hashtable<>();
@@ -15,7 +16,13 @@ public class Visitor extends LangBaseVisitor {
         LangParser parser = new LangParser(tokens);
         ParseTree tree = parser.file();
         Visitor visitor = new Visitor();
-        Object val = visitor.visit(tree);
+
+        try {
+            Object val = visitor.visit(tree);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
 
         if (parser.getNumberOfSyntaxErrors() == 0) {
             System.out.println("All good!");
@@ -62,7 +69,7 @@ public class Visitor extends LangBaseVisitor {
     }
 
     @Override
-    public Object visitFactors(LangParser.FactorsContext ctx) throws Exception {
+    public Object visitFactors(LangParser.FactorsContext ctx) {
         if (ctx.children != null) {
             Object firstFactor = visitFactor(ctx.factor());
             Object secondFactor = visitFactors(ctx.factors());
@@ -89,6 +96,6 @@ public class Visitor extends LangBaseVisitor {
             }
         }
 
-        throw new Exception("Invalid multiplication.");
+        return null; // TODO: ideally an error would be thrown
     }
 }

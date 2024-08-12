@@ -170,7 +170,7 @@ public interface LangVisitor<T> extends ParseTreeVisitor<T> {
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFactors(LangParser.FactorsContext ctx) throws Exception;
+	T visitFactors(LangParser.FactorsContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link LangParser#factor}.
 	 * @param ctx the parse tree
