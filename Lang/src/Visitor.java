@@ -132,4 +132,46 @@ public class Visitor extends LangBaseVisitor {
             return total;
         }
     }
+    @Override
+public Object visitExpr(LangParser.ExprContext ctx) {
+    if (ctx.ref_val() != null) {
+        return visit(ctx.ref_val());
+    } else if (ctx.func_call() != null) {
+        return visit(ctx.func_call());
+    } else if (ctx.LENGTH() != null) {
+        return new Length(ctx.LENGTH().getText());
+    } else if (ctx.STRING() != null) {
+        return ctx.STRING().getText().replace("'", ""); // Assuming STRING is wrapped in single quotes
+    } else if (ctx.math_expr() != null) {
+        return visit(ctx.math_expr());
+    } else if (ctx.NUM() != null) {
+        return Double.parseDouble(ctx.NUM().getText());
+    } else if (ctx.declaration() != null) {
+        return visit(ctx.declaration());
+    }
+    
+    // Handle other expression types as necessary
+    return null;
+}
+
+    @Override
+    public Object visitDeclaration(LangParser.DeclarationContext ctx) {
+        
+        Object type = ctx.CLASS().getText();
+        
+        // Init
+        Map<String, Object> attributes = new HashMap<>();
+
+        if (ctx.attribute_list() != null) {
+            for (LangParser.Attribute_pairContext attrCtx : ctx.attribute_list().attribute_pair()) {
+                // Get the attribute name
+                String attributeName = attrCtx.attribute().ID().getText();
+                // Visit the expression to evaluate its value
+                Object attributeValue = visitExpr(attrCtx.expr());
+                // Add the attribute name and value to the map
+                attributes.put(attributeName, attributeValue);
+            }
+        }
+        return new ClimbingObject(type, attributes);
+    }
 }
