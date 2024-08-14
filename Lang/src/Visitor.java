@@ -53,49 +53,83 @@ public class Visitor extends LangBaseVisitor {
         return obj;
     }
 
+    // TODO
+    @Override
+    public Object visitMath_expr(LangParser.Math_exprContext ctx) {
+        return super.visitMath_expr(ctx);
+    }
+
     @Override
     public Object visitFactor(LangParser.FactorContext ctx) {
         if (ctx.math_expr() != null) {
-            return ctx.math_expr(); // TODO: Unclear if this makes sense
+            return visitMath_expr(ctx.math_expr());
         } else if (ctx.NUM() != null) {
             return Double.parseDouble(ctx.NUM().toString());
         } else if (ctx.LENGTH() != null) {
             return new Length(ctx.LENGTH().toString());
         } else if (ctx.ref_val() != null) {
-            return ctx.ref_val(); // TODO: same as math_expr...
+            return visitRef_val(ctx.ref_val());
         }
 
-        return super.visitFactor(ctx);
+        return null;
     }
 
     @Override
-    public Object visitFactors(LangParser.FactorsContext ctx) {
-        if (ctx.children != null) {
-            Object firstFactor = visitFactor(ctx.factor());
-            Object secondFactor = visitFactors(ctx.factors());
-            String op = ctx.children.get(0).toString();
+    public Object visitTerm(LangParser.TermContext ctx) {
+        LinkedList<Object> factorList = new LinkedList<>();
+        LinkedList<String> opList = new LinkedList<>();
+        LangParser.FactorsContext factors = ctx.factors();
+        factorList.add(visitFactor(ctx.factor()));
 
-            if (firstFactor instanceof Double) {
-                double k = (double) firstFactor;
-                if (secondFactor instanceof Double) {
-                    if (op.equals("*")) {
-                        return k * ((double) secondFactor);
-                    } else if (op.equals("/")) {
-                        return k / ((double) secondFactor);
-                    }
-                } else if (secondFactor instanceof Length) {
-                    double factor = op.equals("/") ? 1 / k : k;
-                    return ((Length) secondFactor).multiplyBy(factor);
-                }
-            } else if (firstFactor instanceof Length) {
-                if (secondFactor instanceof Double) {
-                    double k = (double) secondFactor;
-                    double factor = op.equals("/") ? 1 / k : k;
-                    return ((Length) firstFactor).multiplyBy(factor);
+        while (factors.factor() != null) {
+            factorList.add(visitFactor(factors.factor()));
+            String op = factors.children.get(0).toString();
+            opList.add(op);
+            factors = factors.factors();
+        }
+
+        int lengthIndex = -1;
+
+        for (int i = 0; i < factorList.size(); i++) {
+            if (factorList.get(i) instanceof Length) {
+                if (lengthIndex == -1) {
+                    lengthIndex = i;
+                } else {
+                    // TODO: throw error, trying to multiply lengths
+                    return null;
                 }
             }
         }
 
-        return null; // TODO: ideally an error would be thrown
+        if (lengthIndex > 0 && opList.get(lengthIndex - 1).equals("/")) {
+            // TODO: throw error, trying to divide by length.
+            return null;
+        }
+
+        if (lengthIndex != -1) {
+            // Swap factors to have the length in front
+            Length length = (Length) factorList.get(lengthIndex);
+            factorList.set(lengthIndex, factorList.get(0));
+            factorList.set(0, length);
+
+            for (int i = 1; i < factorList.size(); i++) {
+                double factor = (double) factorList.get(i);
+                if (opList.get(i - 1).equals("/")) factor = 1 / factor;
+                length.multiplyBy(factor);
+            }
+
+            return length;
+        } else {
+            double total = (double) factorList.get(0);
+
+            for (int i = 1; i < factorList.size(); i++) {
+                double factor = (double) factorList.get(i);
+                if (opList.get(i - 1).equals("/")) factor = 1 / factor;
+                total *= factor;
+            }
+
+            System.out.println(total);
+            return total;
+        }
     }
 }

@@ -30,6 +30,11 @@ public class Length {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return length + " m";
+    }
+
     public static void main(String[] args) {
         Length test = new Length("4 ft");
     }
