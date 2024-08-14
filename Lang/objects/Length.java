@@ -30,6 +30,11 @@ public class Length {
         return this;
     }
 
+    public Length addBy(Length summand) {
+        length += summand.getLengthInMeters();
+        return this;
+    }
+
     @Override
     public String toString() {
         return length + " m";

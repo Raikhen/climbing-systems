@@ -53,12 +53,6 @@ public class Visitor extends LangBaseVisitor {
         return obj;
     }
 
-    // TODO
-    @Override
-    public Object visitMath_expr(LangParser.Math_exprContext ctx) {
-        return super.visitMath_expr(ctx);
-    }
-
     @Override
     public Object visitFactor(LangParser.FactorContext ctx) {
         if (ctx.math_expr() != null) {
@@ -128,8 +122,58 @@ public class Visitor extends LangBaseVisitor {
                 total *= factor;
             }
 
-            System.out.println(total);
             return total;
         }
+    }
+
+
+    @Override
+    public Object visitMath_expr(LangParser.Math_exprContext ctx) {
+        LinkedList<Object> termList = new LinkedList<>();
+        LinkedList<String> opList = new LinkedList<>();
+        LangParser.TermsContext terms = ctx.terms();
+        termList.add(visitTerm(ctx.term()));
+
+        while (terms.term() != null) {
+            termList.add(visitTerm(terms.term()));
+            String op = terms.children.get(0).toString();
+            opList.add(op);
+            terms = terms.terms();
+        }
+
+        if (termList.get(0) instanceof Length) {
+            Length total = (Length) termList.get(0);
+
+            for (int i = 1; i < termList.size(); i++) {
+                if (!(termList.get(i) instanceof Length)) {
+                    // TODO: throw error, addition must be homogenous
+                    return null;
+                }
+            }
+
+            for (int i = 1; i < termList.size(); i++) {
+                total.addBy((Length) termList.get(i));
+            }
+
+            return total;
+        } else if (termList.get(0) instanceof Double) {
+            double total = (double) termList.get(0);
+
+            for (int i = 1; i < termList.size(); i++) {
+                if (!(termList.get(i) instanceof Double)) {
+                    // TODO: throw error, addition must be homogenous
+                    return null;
+                }
+            }
+
+            for (int i = 1; i < termList.size(); i++) {
+                total += (double) termList.get(i);
+            }
+
+            return total;
+        }
+
+        // TODO: throw error if not length or double
+        return null;
     }
 }
