@@ -268,13 +268,13 @@ public class LangBaseListener implements LangListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConstants(LangParser.ConstantsContext ctx) { }
+	@Override public void enterConstant(LangParser.ConstantContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConstants(LangParser.ConstantsContext ctx) { }
+	@Override public void exitConstant(LangParser.ConstantContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -1,3 +1,4 @@
+/*
 import java.util.*;
 
 public final class Route extends ClimbingObject {
@@ -20,3 +21,4 @@ public final class Route extends ClimbingObject {
         }
     }
 }
+ */

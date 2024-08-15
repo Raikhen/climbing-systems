@@ -136,11 +136,11 @@ public interface LangVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitGrade(LangParser.GradeContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LangParser#constants}.
+	 * Visit a parse tree produced by {@link LangParser#constant}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitConstants(LangParser.ConstantsContext ctx);
+	T visitConstant(LangParser.ConstantContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link LangParser#knots}.
 	 * @param ctx the parse tree

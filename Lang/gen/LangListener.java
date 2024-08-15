@@ -217,15 +217,15 @@ public interface LangListener extends ParseTreeListener {
 	 */
 	void exitGrade(LangParser.GradeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LangParser#constants}.
+	 * Enter a parse tree produced by {@link LangParser#constant}.
 	 * @param ctx the parse tree
 	 */
-	void enterConstants(LangParser.ConstantsContext ctx);
+	void enterConstant(LangParser.ConstantContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LangParser#constants}.
+	 * Exit a parse tree produced by {@link LangParser#constant}.
 	 * @param ctx the parse tree
 	 */
-	void exitConstants(LangParser.ConstantsContext ctx);
+	void exitConstant(LangParser.ConstantContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LangParser#knots}.
 	 * @param ctx the parse tree

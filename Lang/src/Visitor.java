@@ -220,6 +220,34 @@ public class Visitor extends LangBaseVisitor {
             return visitDeclaration(ctx.declaration());
         } else if (ctx.grade().YDS_GRADE() != null || ctx.grade().FRENCH_GRADE() != null) {
             return new Grade(ctx.grade().getText());
+        } else if (ctx.constant() != null) {
+            LangParser.ConstantContext constantCtx = ctx.constant();
+
+            if (constantCtx.ROUTE_STYLES() != null) {
+                return Constant.RouteStyle.fromName(constantCtx.getText());
+            } else if (constantCtx.ROPE_RATINGS() != null) {
+                return Constant.RopeRating.fromName(constantCtx.getText());
+            } else if (constantCtx.ANCHOR_SYSTEMS() != null) {
+                return Constant.AnchorSystem.fromName(constantCtx.getText());
+            } else if (constantCtx.DRAW_TYPES() != null) {
+                return Constant.DrawType.fromName(constantCtx.getText());
+            } else if (constantCtx.CARABINER_TYPES() != null) {
+                return Constant.CarabinerType.fromName(constantCtx.getText());
+            } else if (constantCtx.knots() != null) {
+                LangParser.KnotsContext knotsCtx = constantCtx.knots();
+
+                if (knotsCtx.PROPER_KNOTS() != null) {
+                    return Constant.ProperKnot.fromName(knotsCtx.getText());
+                } else if (knotsCtx.BENDS() != null) {
+                    return Constant.Bend.fromName(knotsCtx.getText());
+                } else if (knotsCtx.HITCHES() != null) {
+                    return Constant.Hitch.fromName(knotsCtx.getText());
+                } else if (knotsCtx.OTHER() != null) {
+                    return Constant.OtherKnot.fromName(knotsCtx.getText());
+                }
+
+                return Constant.CarabinerType.fromName(constantCtx.getText());
+            }
         }
 
         return null;

@@ -39,7 +39,7 @@ expr        : ref_val
             | list
             | tuple
             | grade
-            | constants
+            | constant
             | math_expr
             | func_call
             | LENGTH
@@ -66,7 +66,7 @@ ref_val     : ref ;
 
 grade       : YDS_GRADE | FRENCH_GRADE ;
 
-constants   : ROUTE_STYLES
+constant    : ROUTE_STYLES
             | ROPE_RATINGS
             | ANCHOR_SYSTEMS
             | DRAW_TYPES
@@ -141,7 +141,7 @@ DRAW_TYPES      : 'SPORT_DRAW'
                 ;
 
 CARABINER_TYPES : 'LOCKING'
-                | 'NON-LOCKING'
+                | 'NON_LOCKING'
                 ;
 
 PROPER_KNOTS    : 'BARREL'

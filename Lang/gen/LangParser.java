@@ -28,7 +28,7 @@ public class LangParser extends Parser {
 		RULE_def_param_list = 7, RULE_param_list = 8, RULE_assignment = 9, RULE_declaration = 10, 
 		RULE_attribute_list = 11, RULE_attribute_pair = 12, RULE_expr = 13, RULE_list = 14, 
 		RULE_tuple = 15, RULE_expr_seq = 16, RULE_attribute = 17, RULE_ref = 18, 
-		RULE_ref_val = 19, RULE_grade = 20, RULE_constants = 21, RULE_knots = 22, 
+		RULE_ref_val = 19, RULE_grade = 20, RULE_constant = 21, RULE_knots = 22, 
 		RULE_math_expr = 23, RULE_terms = 24, RULE_term = 25, RULE_factors = 26, 
 		RULE_factor = 27;
 	private static String[] makeRuleNames() {
@@ -36,7 +36,7 @@ public class LangParser extends Parser {
 			"file", "block", "statement", "func_def", "func_call", "mixed_param_list", 
 			"named_param_list", "def_param_list", "param_list", "assignment", "declaration", 
 			"attribute_list", "attribute_pair", "expr", "list", "tuple", "expr_seq", 
-			"attribute", "ref", "ref_val", "grade", "constants", "knots", "math_expr", 
+			"attribute", "ref", "ref_val", "grade", "constant", "knots", "math_expr", 
 			"terms", "term", "factors", "factor"
 		};
 	}
@@ -952,8 +952,8 @@ public class LangParser extends Parser {
 		public GradeContext grade() {
 			return getRuleContext(GradeContext.class,0);
 		}
-		public ConstantsContext constants() {
-			return getRuleContext(ConstantsContext.class,0);
+		public ConstantContext constant() {
+			return getRuleContext(ConstantContext.class,0);
 		}
 		public Math_exprContext math_expr() {
 			return getRuleContext(Math_exprContext.class,0);
@@ -1030,7 +1030,7 @@ public class LangParser extends Parser {
 				enterOuterAlt(_localctx, 6);
 				{
 				setState(146);
-				constants();
+				constant();
 				}
 				break;
 			case 7:
@@ -1461,7 +1461,7 @@ public class LangParser extends Parser {
 	}
 
 	@SuppressWarnings("CheckReturnValue")
-	public static class ConstantsContext extends ParserRuleContext {
+	public static class ConstantContext extends ParserRuleContext {
 		public TerminalNode ROUTE_STYLES() { return getToken(LangParser.ROUTE_STYLES, 0); }
 		public TerminalNode ROPE_RATINGS() { return getToken(LangParser.ROPE_RATINGS, 0); }
 		public TerminalNode ANCHOR_SYSTEMS() { return getToken(LangParser.ANCHOR_SYSTEMS, 0); }
@@ -1470,28 +1470,28 @@ public class LangParser extends Parser {
 		public KnotsContext knots() {
 			return getRuleContext(KnotsContext.class,0);
 		}
-		public ConstantsContext(ParserRuleContext parent, int invokingState) {
+		public ConstantContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_constants; }
+		@Override public int getRuleIndex() { return RULE_constant; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LangListener ) ((LangListener)listener).enterConstants(this);
+			if ( listener instanceof LangListener ) ((LangListener)listener).enterConstant(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LangListener ) ((LangListener)listener).exitConstants(this);
+			if ( listener instanceof LangListener ) ((LangListener)listener).exitConstant(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LangVisitor ) return ((LangVisitor<? extends T>)visitor).visitConstants(this);
+			if ( visitor instanceof LangVisitor ) return ((LangVisitor<? extends T>)visitor).visitConstant(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final ConstantsContext constants() throws RecognitionException {
-		ConstantsContext _localctx = new ConstantsContext(_ctx, getState());
-		enterRule(_localctx, 42, RULE_constants);
+	public final ConstantContext constant() throws RecognitionException {
+		ConstantContext _localctx = new ConstantContext(_ctx, getState());
+		enterRule(_localctx, 42, RULE_constant);
 		try {
 			setState(189);
 			_errHandler.sync(this);
