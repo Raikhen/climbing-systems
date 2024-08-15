@@ -211,10 +211,9 @@ public class Visitor extends LangBaseVisitor {
             paramList = paramList.param_list();
         }
 
-        if (fnName.equals("print")) {
-            for (int i = 0; i < params.size(); i ++) {
-                System.out.println(params.get(i));
-            }
+        if (fnName.equals("display") && params.get(0) instanceof Route) {
+            Route route = (Route) params.get(0);
+            route.visualizeRoute();
         }
 
         return null;
