@@ -36,7 +36,6 @@ attribute_pair  : attribute ':' expr ;
 // Expressions and identifiers
 expr        : ref_val
             | declaration
-            | (declaration '.' attribute)
             | list
             | tuple
             | grade

@@ -199,8 +199,50 @@ public class Visitor extends LangBaseVisitor {
     }
 
     @Override
-    public Object visitExpr(LangParser.ExprContext ctx) {
+    public Object visitFunc_call(LangParser.Func_callContext ctx) {
+        // TODO
         return null;
-        // return super.visitExpr(ctx);
+    }
+
+    @Override
+    public Object visitExpr(LangParser.ExprContext ctx) {
+        if (ctx.ref_val() != null) {
+            return visitRef_val(ctx.ref_val());
+        } else if (ctx.func_call() != null) {
+            return visitFunc_call(ctx.func_call());
+        } else if (ctx.LENGTH() != null) {
+            return new Length(ctx.LENGTH().getText());
+        } else if (ctx.STRING() != null) {
+            return ctx.STRING().getText().replace("'", "");
+        } else if (ctx.math_expr() != null) {
+            return visitMath_expr(ctx.math_expr());
+        } else if (ctx.declaration() != null) {
+            return visitDeclaration(ctx.declaration());
+        } else if (ctx.grade().YDS_GRADE() != null || ctx.grade().FRENCH_GRADE() != null) {
+            return new Grade(ctx.grade().getText());
+        }
+
+        return null;
+    }
+
+    @Override
+    public Object visitDeclaration(LangParser.DeclarationContext ctx) {
+        Object type = ctx.CLASS().getText();
+
+        // Init
+        Map<String, Object> attributes = new HashMap<>();
+
+        if (ctx.attribute_list() != null) {
+            for (LangParser.Attribute_pairContext attrCtx : ctx.attribute_list().attribute_pair()) {
+                // Get the attribute name
+                String attributeName = attrCtx.attribute().ID().getText();
+                // Visit the expression to evaluate its value
+                Object attributeValue = visitExpr(attrCtx.expr());
+                // Add the attribute name and value to the map
+                attributes.put(attributeName, attributeValue);
+            }
+        }
+
+        return new ClimbingObject(type, attributes);
     }
 }
