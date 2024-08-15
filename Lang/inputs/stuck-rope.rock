@@ -1,98 +1,93 @@
-define rope_stuck {
 
-  rope_stuck.name = 'Venus on a Halfshell' // example of modifying attributes
+rope_stuck.name = 'Venus on a Halfshell' // example of modifying attributes
 
-  Protection p1 {type: [Bolt]}
+Protection p1 {type: [Bolt]}
 
-  Protection p2 {type: [Bolt]}
+Protection p2 {type: [Bolt]}
 
-  Protection p3 {type: [Bolt]}
+Protection p3 {type: [Bolt]}
 
-  Protection p4 {type: [Bolt]}
+Protection p4 {type: [Bolt]}
 
-  Vector v1 {
-    angle: 0deg
-    length: 5m
-  }
-  Vector v2 {
-    angle: 0deg
-    length: 5m
-  }
-  Vector v3 {
-    angle: 0deg
-    length: 5m
-  }
-  Vector v4 {
-    angle: 0deg
-    length: 5m
-  }
-  Vector v5 {
-    angle: 0deg
-    length: 5m
+Vector v1 {
+angle: 0deg
+length: 5m
 }
-  Vector v6 {
-    angle: 15deg
-    length: 3m
+Vector v2 {
+angle: 0deg
+length: 5m
 }
-  Protection p5 {type: [Bolt { with: RapRing }, Bolt { with: RapRing }]}
+Vector v3 {
+angle: 0deg
+length: 5m
+}
+Vector v4 {
+angle: 0deg
+length: 5m
+}
+Vector v5 {
+angle: 0deg
+length: 5m
+}
+Vector v6 {
+angle: 15deg
+length: 3m
+}
+Protection p5 {type: [Bolt { with: RapRing }, Bolt { with: RapRing }]}
 
-  Route venus {
-    length: sum([v1, v2, v3, v4, v5])
-    grade: 5.12c
-    protection: [(p1, v1), (p2, v2), (p3, v3), (p4, v4), (p5, v5)]
-    type: MIXED
-    status: completed
-  }
-
-  Climber sebastian {
-    gear: [
-      Draw,
-      Draw,
-      Draw,
-      Draw,
-      Draw,
-      Draw
-      carabiner { type: LOCKING }
-    ]
-    location: ground
-  }
-  GriGri dylan_grigri // Just a declaration
-
-  Climber dylan {
-    gear: [
-        dylan_grigri,
-        dylan_locker]
-  }
-  Rope rope {
-    length: 60m
-    rated: SINGLE
-  }
-  Knot anchor_block {
-    type: TANGLE
-    with: rope.middle
-    on: constriction
-  }
-  Protection constriction {
-    type: crack
-    size: .3
-    location: (p3, v6)
-  }
-  Knot sebastian_figure8 {
-    type: FIGURE_EIGHT_FOLLOW_THROUGH
-    with: rope.first_end
-    on: sebastian.harness.hardpoints
-  }
-  Carabiner dylan_locker {
-    type: LOCKING
-    clipped_to: [dylan.harness.belay_loop, dylan_grigri]
-  }
-  Attachment grigri_rope {
-    device: dylan_grigri
-    to: rope
-    active_side: rope.first_end
-    distance_to_end: rope.length - 2 * venus.length
-  }
-  // Let's assume all climbers have harness, helmet, shoes?
+Route venus {
+length: sum([v1, v2, v3, v4, v5])
+grade: 5.12c
+protection: [(p1, v1), (p2, v2), (p3, v3), (p4, v4), (p5, v5)]
+type: MIXED
+status: completed
 }
 
-stuck_rope()
+Climber sebastian {
+gear: [
+  Draw,
+  Draw,
+  Draw,
+  Draw,
+  Draw,
+  Draw
+  carabiner { type: LOCKING }
+]
+location: ground
+}
+GriGri dylan_grigri // Just a declaration
+
+Climber dylan {
+gear: [
+    dylan_grigri,
+    dylan_locker]
+}
+Rope rope {
+length: 60m
+rated: SINGLE
+}
+Knot anchor_block {
+type: TANGLE
+with: rope.middle
+on: constriction
+}
+Protection constriction {
+type: crack
+size: .3
+location: (p3, v6)
+}
+Knot sebastian_figure8 {
+type: FIGURE_EIGHT_FOLLOW_THROUGH
+with: rope.first_end
+on: sebastian.harness.hardpoints
+}
+Carabiner dylan_locker {
+type: LOCKING
+clipped_to: [dylan.harness.belay_loop, dylan_grigri]
+}
+Attachment grigri_rope {
+device: dylan_grigri
+to: rope
+active_side: rope.first_end
+distance_to_end: rope.length - 2 * venus.length
+}

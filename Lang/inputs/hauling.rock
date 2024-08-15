@@ -1,10 +1,9 @@
-define problem() {
-  AnchorSystem quad {
+AnchorSystem quad {
     type: QUAD
     using: [Carabiner c1 { type: LOCKING }, Carabiner c2 { type: LOCKING }]
-  }
+}
 
-  Route duet {
+Route duet {
     name: 'Duet'
     length: 100ft
     grade: 5.7
@@ -12,19 +11,19 @@ define problem() {
       Bolt anchor_bolt1 { with: RapRing },
       Bolt anchor_bolt2 { with: RapRing }
     ]
-  }
+}
 
-  Attachment anchor_carabiner1 {
+Attachment anchor_carabiner1 {
     device: c1
     to: anchor_bolt1.with
-  }
+}
 
-  Attachment anchor_carabiner2 {
+Attachment anchor_carabiner2 {
     device: c2
     to: anchor_bolt2.with
-  }
+}
 
-  Climber alice {
+Climber alice {
     gear: [
       GriGri alice_grigri,
       DyneemaSling { length: 240cm },
@@ -34,63 +33,59 @@ define problem() {
       Carabiner c4 { type: LOCKING },
       Carabiner c5 { type: LOCKING }
     ]
-  }
+}
 
-  Climber bob {
+Climber bob {
     gear: [GriGri]
-  }
+}
 
-  Rope rope {
+Rope rope {
     length: 70m
     rated: SINGLE
-  }
+}
 
-  Carabiner alice_clove_carabiner {
+Carabiner alice_clove_carabiner {
     type: LOCKING
     clipped_to: [quad.masterpoint]
-  }
+}
 
-  Knot alice_clove {
+Knot alice_clove {
     type: CLOVE
     with: r1.at // Can attributes be methods??? I wanna say at 2m
     on: alice_clove_carabiner
-  }
+}
 
-  Knot alice_figure8 {
+Knot alice_figure8 {
     type: FIGURE_EIGHT_FOLLOW_THROUGH
     with: r1.first_end
     on: alice.harness.hardpoints
-  }
+}
 
-  Knot bob_figure8 {
+Knot bob_figure8 {
     type: FIGURE_EIGHT_FOLLOW_THROUGH
     with: r1.second_end
     on: bob.harness.hardpoints
-  }
+}
 
-  Attachment grigri_rope {
+Attachment grigri_rope {
     device: alice_grigri
     to: rope.at // 60m
     active_side: rope.second_end
-  }
-
-  Carabiner belay_locker {
-    type: LOCKING
-  }
-
-  Attachment {
-    device: alice_grigri
-    to: belay_locker
-  }
-
-  Attachment {
-    device: belay_locker
-    to: quad.masterpoint
-  }
 }
 
-// Set up the scenario of the problem
-problem()
+Carabiner belay_locker {
+    type: LOCKING
+}
+
+Attachment {
+    device: alice_grigri
+    to: belay_locker
+}
+
+Attachment {
+    device: belay_locker
+    to: quad.masterpoint
+}
 
 // Solution to the problem
 // ...

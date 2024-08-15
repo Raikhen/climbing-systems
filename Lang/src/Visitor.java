@@ -10,7 +10,7 @@ public class Visitor extends LangBaseVisitor {
     private Dictionary<String, Object> variables = new Hashtable<>();
 
     public static void main(String[] args) throws Exception {
-        CharStream test = CharStreams.fromFileName("inputs/climbing-setup.rock");
+        CharStream test = CharStreams.fromFileName("Lang/inputs/climbing-setup.rock");
         LangLexer lexer = new LangLexer(test);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         LangParser parser = new LangParser(tokens);
@@ -45,6 +45,7 @@ public class Visitor extends LangBaseVisitor {
 
         while (obj != null) {
             ClimbingObject climbingObject = (ClimbingObject) obj;
+            if (refChain.size() == 0) break;
             obj = climbingObject.attributes.get(refChain.remove());
         }
 
@@ -179,10 +180,11 @@ public class Visitor extends LangBaseVisitor {
 
     @Override
     public Object visitExpr_seq(LangParser.Expr_seqContext ctx) {
-        if (ctx.expr_seq().expr() != null) {
+        if (ctx != null && ctx.expr() != null) {
             LinkedList<Object> arr = (LinkedList<Object>) visitExpr_seq(ctx.expr_seq());
             Object newVal = visitExpr(ctx.expr());
             arr.addFirst(newVal);
+            return arr;
         }
 
         return new LinkedList<Object>();
@@ -211,9 +213,13 @@ public class Visitor extends LangBaseVisitor {
             paramList = paramList.param_list();
         }
 
-        if (fnName.equals("display") && params.get(0) instanceof Route) {
-            Route route = (Route) params.get(0);
-            route.visualizeRoute();
+        if (fnName.equals("display") && params.get(0) instanceof ClimbingObject) {
+            ClimbingObject obj = (ClimbingObject) params.get(0);
+
+            if (obj.type.equals("Route")) {
+                Route route = new Route((HashMap<String, Object>) obj.attributes);
+                route.visualizeRoute();
+            }
         }
 
         return null;
@@ -235,6 +241,10 @@ public class Visitor extends LangBaseVisitor {
             return visitDeclaration(ctx.declaration());
         } else if (ctx.grade() != null) {
             return new Grade(ctx.grade().getText());
+        } else if (ctx.list() != null) {
+            return visitList(ctx.list());
+        } else if (ctx.tuple() != null) {
+            return visitTuple(ctx.tuple());
         } else if (ctx.constant() != null) {
             LangParser.ConstantContext constantCtx = ctx.constant();
 
@@ -290,6 +300,13 @@ public class Visitor extends LangBaseVisitor {
             }
         }
 
-        return new ClimbingObject(type, attributes);
+        Object object = new ClimbingObject(type, attributes);
+
+        if (ctx.ID() != null) {
+            String varName = ctx.ID().getText();
+            variables.put(varName, object);
+        }
+
+        return object;
     }
 }
