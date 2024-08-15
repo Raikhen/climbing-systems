@@ -176,4 +176,31 @@ public class Visitor extends LangBaseVisitor {
         // TODO: throw error if not length or double
         return null;
     }
+
+    @Override
+    public Object visitExpr_seq(LangParser.Expr_seqContext ctx) {
+        if (ctx.expr_seq().expr() != null) {
+            LinkedList<Object> arr = (LinkedList<Object>) visitExpr_seq(ctx.expr_seq());
+            Object newVal = visitExpr(ctx.expr());
+            arr.addFirst(newVal);
+        }
+
+        return new LinkedList<Object>();
+    }
+
+    @Override
+    public Object visitTuple(LangParser.TupleContext ctx) {
+        return visitExpr_seq(ctx.expr_seq());
+    }
+
+    @Override
+    public Object visitList(LangParser.ListContext ctx) {
+        return visitExpr_seq(ctx.expr_seq());
+    }
+
+    @Override
+    public Object visitExpr(LangParser.ExprContext ctx) {
+        return null;
+        // return super.visitExpr(ctx);
+    }
 }
