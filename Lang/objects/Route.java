@@ -1,4 +1,8 @@
-/*import java.util.*;
+import javafx.application.Application;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public final class Route extends ClimbingObject {
 
@@ -7,39 +11,68 @@ public final class Route extends ClimbingObject {
     }
 
     public String getDanger() {
-        Object[] pro = (Object[])this.attributes.get("protection");
+        // Assuming 'protection' is a List of Objects, where each Object represents a protection point
+        List<Object> pro = (List<Object>) this.attributes.get("protection");
 
         double current_height = 0;
-        for (int i=0; i < pro.length; i++) {
+        for (Object protectionData : pro) {
+            // Cast the protectionData to a Map
+            Map<String, Object> protectionMap = (Map<String, Object>) protectionData;
 
-            if (current_height >= (double)49 && ((double)2 * pro[i][1].attributes.get("length") - current_height) > (double)0) {return "X";}
-            else if (current_height > (double)35 && ((double)2 * pro[i][1].attributes.get("length") - current_height) > (double)0) {return "R";}
-            else if (current_height > (double)15 && ((double)2 * pro[i][1].attributes.get("length") - current_height) > (double)0) {return "PG13";}
-            else {return "pg";}
+            // Access the length attribute
+            double length = new Length((String) protectionMap.get("length")).getLengthInMeters();
 
-            current_height = current_height + pro[i][1].attributes.get("length");
+            // Check danger levels
+            if (current_height >= 49 && (2 * length - current_height) > 0) {
+                return "X";
+            } else if (current_height > 35 && (2 * length - current_height) > 0) {
+                return "R";
+            } else if (current_height > 15 && (2 * length - current_height) > 0) {
+                return "PG13";
+            }
+
+            current_height += length;
         }
+
+        return "pg"; // Default danger level if none of the conditions are met
     }
 
     public void visualizeRoute() {
-        Object[] pro = (Object[])this.attributes.get("protection");
-        double[][] inputVectors = {};
+        // Assuming 'protection' is a List of Objects, where each Object represents a protection point
+        List<Object> pro = (List<Object>) this.attributes.get("protection");
 
-        for (int i=0; i < pro.length; i++) {
+        // Initialize the array with the correct size
+        double[][] inputVectors = new double[pro.size()][3];
 
-            Length length = new Length((String)pro[i][1].attributes.get("length"));
+        for (int i = 0; i < pro.size(); i++) {
+            // Assuming pro.get(i) returns an Object array, where index 0 is the type and index 1 contains attributes
+            Object[] protectionData = (Object[]) pro.get(i);
 
+            // Access the length attribute
+            String lengthString = (String) ((Map<String, Object>) protectionData[1]).get("length");
+            Length length = new Length(lengthString);
+
+            // Determine the type
+            String protectionType = (String) ((Map<String, Object>) protectionData[0]).get("type");
             double type = 0;
+            if ("Bolt".equals(protectionType)) {
+                type = 2;
+            } else if ("Cam".equals(protectionType)) {
+                type = 1;
+            } else {
+                type = 3; // Default to 3 for other types
+            }
 
-            if (pro[i][0].attributes.get("type") == "Bolt") {type = 1;}
-            else if (pro[i][0].attributes.get("type") == "Cam") {type = 2;}
-            else {type = 3;}
-
-            inputVectors[i] = [(double)pro[i][1].attributes.get("angle"), (double)length.getLengthInMeters(), (double)type];
+            // Access the angle and store values in the inputVectors array
+            double angle = (double) ((Map<String, Object>) protectionData[1]).get("angle");
+            inputVectors[i][0] = angle;
+            inputVectors[i][1] = length.getLengthInMeters();
+            inputVectors[i][2] = type;
         }
 
-        ClimbingRouteVisualizer visualizer = new ClimbingRouteVisualizer(inputVectors);
+        // Set vectors and launch the application
+        ClimbingRouteVisualizer.setVectors(inputVectors);
+        Application.launch(ClimbingRouteVisualizer.class); // Launch JavaFX
     }
-}
 
- */
+}

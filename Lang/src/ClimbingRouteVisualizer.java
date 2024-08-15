@@ -119,6 +119,6 @@ public class ClimbingRouteVisualizer extends Application {
         ClimbingRouteVisualizer.setVectors(inputVectors);
 
         // Launch the JavaFX application
-        Application.launch(ClimbingRouteVisualizer.class, args);
+        Application.launch(ClimbingRouteVisualizer.class);
     }
 }
