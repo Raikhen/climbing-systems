@@ -100,3 +100,5 @@ define lulu_climbing_setup() {
 }
 
 lulu_climbing_setup()
+
+test_func(1, 2, 3)

@@ -20,7 +20,7 @@ public class Visitor extends LangBaseVisitor {
         try {
             Object val = visitor.visit(tree);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
 
 
@@ -200,7 +200,17 @@ public class Visitor extends LangBaseVisitor {
 
     @Override
     public Object visitFunc_call(LangParser.Func_callContext ctx) {
-        // TODO
+        String fnName = ctx.ID().getText();
+        List<Object> params = new LinkedList<>();
+
+        LangParser.Param_listContext paramList = ctx.param_list();
+
+        while (paramList != null) {
+            Object newParam = visitExpr(paramList.expr());
+            params.add(newParam);
+            paramList = paramList.param_list();
+        }
+
         return null;
     }
 
@@ -218,7 +228,7 @@ public class Visitor extends LangBaseVisitor {
             return visitMath_expr(ctx.math_expr());
         } else if (ctx.declaration() != null) {
             return visitDeclaration(ctx.declaration());
-        } else if (ctx.grade().YDS_GRADE() != null || ctx.grade().FRENCH_GRADE() != null) {
+        } else if (ctx.grade() != null) {
             return new Grade(ctx.grade().getText());
         } else if (ctx.constant() != null) {
             LangParser.ConstantContext constantCtx = ctx.constant();
@@ -248,6 +258,10 @@ public class Visitor extends LangBaseVisitor {
 
                 return Constant.CarabinerType.fromName(constantCtx.getText());
             }
+        } else if (ctx.CAM_SIZE() != null) {
+            return CamSize.fromName(ctx.CAM_SIZE().getText());
+        } else if (ctx.ANGLE() != null) {
+            return new Angle(ctx.ANGLE().getText());
         }
 
         return null;
@@ -255,7 +269,7 @@ public class Visitor extends LangBaseVisitor {
 
     @Override
     public Object visitDeclaration(LangParser.DeclarationContext ctx) {
-        Object type = ctx.CLASS().getText();
+        String type = ctx.CLASS().getText();
 
         // Init
         Map<String, Object> attributes = new HashMap<>();

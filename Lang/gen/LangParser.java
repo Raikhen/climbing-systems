@@ -375,8 +375,8 @@ public class LangParser extends Parser {
 	@SuppressWarnings("CheckReturnValue")
 	public static class Func_callContext extends ParserRuleContext {
 		public TerminalNode ID() { return getToken(LangParser.ID, 0); }
-		public Mixed_param_listContext mixed_param_list() {
-			return getRuleContext(Mixed_param_listContext.class,0);
+		public Param_listContext param_list() {
+			return getRuleContext(Param_listContext.class,0);
 		}
 		public Func_callContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -414,7 +414,7 @@ public class LangParser extends Parser {
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 30064706052L) != 0)) {
 				{
 				setState(84);
-				mixed_param_list();
+				param_list();
 				}
 			}
 
@@ -2025,7 +2025,7 @@ public class LangParser extends Parser {
 		"KJ\u0001\u0000\u0000\u0000KL\u0001\u0000\u0000\u0000LM\u0001\u0000\u0000"+
 		"\u0000MN\u0005\u0003\u0000\u0000NO\u0005\u0004\u0000\u0000OP\u0003\u0002"+
 		"\u0001\u0000PQ\u0005\u0005\u0000\u0000Q\u0007\u0001\u0000\u0000\u0000"+
-		"RS\u0005\u001c\u0000\u0000SU\u0005\u0002\u0000\u0000TV\u0003\n\u0005\u0000"+
+		"RS\u0005\u001c\u0000\u0000SU\u0005\u0002\u0000\u0000TV\u0003\u0010\b\u0000"+
 		"UT\u0001\u0000\u0000\u0000UV\u0001\u0000\u0000\u0000VW\u0001\u0000\u0000"+
 		"\u0000WX\u0005\u0003\u0000\u0000X\t\u0001\u0000\u0000\u0000Y`\u0003\f"+
 		"\u0006\u0000Z`\u0003\u0010\b\u0000[\\\u0003\u0010\b\u0000\\]\u0005\u0006"+

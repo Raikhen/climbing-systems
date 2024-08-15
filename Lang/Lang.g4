@@ -8,7 +8,7 @@ statement   : declaration | func_def | func_call | assignment ;
 // Functions
 func_def            : 'define' ID '(' def_param_list? ')' '{' block '}' ;
 
-func_call           : ID '(' mixed_param_list? ')' ;
+func_call           : ID '(' param_list? ')' ; // ID '(' mixed_param_list? ')' ;
 
 mixed_param_list    : named_param_list
                     | param_list
