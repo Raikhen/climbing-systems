@@ -1,4 +1,3 @@
-/*
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -123,4 +122,3 @@ public class ClimbingRouteVisualizer extends Application {
         Application.launch(ClimbingRouteVisualizer.class, args);
     }
 }
- */
