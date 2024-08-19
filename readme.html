@@ -884,6 +884,51 @@ especially in relation to various routes.
 Areas of further effort and research include automated descriptions of human-readable climbing route descriptions and system descriptions based on automated inputs, as well
 as the creation of easier tools for displaying outputs to a user such that less coding knowledge/expertise is needed to use the program.
 
+DSL Comparison
+================
+General language: In comparison with generating our output with general language, I think there is a strong argument to be made that our DSL
+is more logical/easier to use. For one thing, the language makes it very easy to describe climbing scenarios and their associated objects in objective modular terms.
+It would be much more difficult to parse this input without using a DSL as an RDP would have to weed out far more edge cases and associated unacceptable examples more manually whereas antlr enables a 
+more automatic approach. The advantages to using our DSL are:
+1. Simplicity/readability
+2. Easy exportability to the creation of Java objects using visitors
+3. Fast and efficient parsing
+4. the ability to easily read in examples and scenarios of all different sizes and adapt to new information quickly without writing new code
+Using a language like Java or Python to do the same thing would lack many of the same capabilities as using simple objects like lists and dataframes wouldn't 
+convey categories, typings, or associations nearly as well as our DSL.
+
+By Hand: I think a stronger argument can be made that doing the operations described below by hand is more 'effective' than our computerized approach can entail.
+Ultimately, it would be true that describing a climbing route/scenario exactly with regular english instead of in our DSL is simpler and involves much more detail as their are Ultimately
+things our language can't really capture at the moment (because real-world scenarios involve tons of complexity). For instance, we haven't implemented methods to define route obstructions like ledges or bushes or 
+various forms of natural protection like trees or any system for protection quality (like rusted bolts or poor rock). All these things might be relative to a route though and therefore important if we were to discuss it in real life.
+
+That being said, the advantage of the DSL is that there are hundreds of thousands of climbing routes in just North America and it would be impossible to describe all of them in natural language with so much detail.
+Instead, using a DSL that can read in route information generated through forums and collective agreement on existent places like mountain project allows us to create semi-detailed descriptions automatically
+and convert them into useful knowledge about safety and with descriptions like the diagrams. As with many computer programs, doing something by hand may be 'better' but automation
+has a much wider scope which makes our DSL worthwhile.
+
+Work Distribution
+=================
+
+Project concept/initial writeup - Sebastian + Dylan
+Lang.g4 - All
+
+Objects:
+- Angle - 
+- CamSize - 
+- ClimbingObject - Sebastian.
+- Grade - Javi
+- Length - Dylan
+- Route - Sebastian + Walker
+
+SRC:
+- Visualizer - Walker
+- Listener - Dylan
+- Visitor - Dylan + Sebastian + Walker
+
+Inputs: Dylan + Sebastian (stuck-rope)
+Documentation - All (readme - Sebastian + Dylan)
+
 <!--   Feel free to modify the following to fit a theme of your choosing   -->
 <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet"> <!-- a sans-serif font -->
 <style>  /* A TAYLOR-INSPIRED THEME */
