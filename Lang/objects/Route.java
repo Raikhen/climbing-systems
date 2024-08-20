@@ -1,11 +1,11 @@
 import javafx.application.Application;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public final class Route extends ClimbingObject {
-
     public Route(HashMap<String, Object> route) {
         super("Route", route);
     }
@@ -39,22 +39,26 @@ public final class Route extends ClimbingObject {
 
     public void visualizeRoute() {
         // Assuming 'protection' is a List of Objects, where each Object represents a protection point
-        List<Object> pro = (List<Object>) this.attributes.get("protection");
+        List<Object> pro = (List<Object>) attributes.get("protection");
 
         // Initialize the array with the correct size
         double[][] inputVectors = new double[pro.size()][3];
 
         for (int i = 0; i < pro.size(); i++) {
             // Assuming pro.get(i) returns an Object array, where index 0 is the type and index 1 contains attributes
-            Object[] protectionData = (Object[]) pro.get(i);
+            List<Object> protectionData = (LinkedList<Object>) pro.get(i);
+
+            ClimbingObject proObject = (ClimbingObject) protectionData.get(0);
+            ClimbingObject vector = (ClimbingObject) protectionData.get(1);
 
             // Access the length attribute
-            String lengthString = (String) ((Map<String, Object>) protectionData[1]).get("length");
-            Length length = new Length(lengthString);
+            // String lengthString = (String) ((Map<String, Object>) protectionData.get(1)).get("length");
+            Length length = (Length) vector.attributes.get("length");
 
             // Determine the type
-            String protectionType = (String) ((Map<String, Object>) protectionData[0]).get("type");
+            String protectionType = ((List<ClimbingObject>) proObject.attributes.get("type")).get(0).type;
             double type = 0;
+
             if ("Bolt".equals(protectionType)) {
                 type = 2;
             } else if ("Cam".equals(protectionType)) {
@@ -64,7 +68,7 @@ public final class Route extends ClimbingObject {
             }
 
             // Access the angle and store values in the inputVectors array
-            double angle = (double) ((Map<String, Object>) protectionData[1]).get("angle");
+            double angle = ((Angle) vector.attributes.get("angle")).getAngle();
             inputVectors[i][0] = angle;
             inputVectors[i][1] = length.getLengthInMeters();
             inputVectors[i][2] = type;

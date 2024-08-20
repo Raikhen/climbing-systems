@@ -1,104 +1,103 @@
-define lulu_climbing_setup() {
-  // Protection { type: Bolt } <-- Example of anonymous object
+// Protection { type: Bolt } <-- Example of anonymous object
 
-  Protection p1 {
-    type: [Cam { size: #2 }]
-  }
-
-  Protection p2 {
-    type: [Bolt]
-  }
-
-  Vector v1 {
-    angle: 40deg
-    length: 5m
-  }
-
-  Vector v2 {
-    angle: -30deg
-    length: 3m
-  }
-
-  Vector v3 {
-    angle: 0deg
-    length: 5m
-  }
-
-  Protection p3 {
-    type: [
-      Bolt {
-        with: RapRing
-      },
-      Bolt {
-        with: RapRing
-      }
-    ]
-  }
-
-  Route lulu {
-    length: 100ft // Shouldn't this be computed from protection?
-    grade: 5.12b
-    protection: [(p1, v1), (p2, v2), (p3, v3)]
-    type: MIXED
-  }
-
-  lulu.name = 'Flesh for Lulu' // example of modifying attributes
-
-  Climber alice {
-    gear: [
-      Cam { size: #2 },
-      Draw { type: ALPINE_DRAW },
-      Draw,
-      Draw,
-      GriGri,
-      DyneemaSling { length: 240cm },
-      Carabiner { type: LOCKING },
-      Carabiner { type: LOCKING },
-      Carabiner { type: LOCKING }
-    ]
-  }
-
-  GriGri bobs_grigri
-
-  Climber bob {
-    gear: [bobs_grigri]
-  }
-
-  Rope rope {
-    length: 60m + 10m
-    rated: SINGLE
-  }
-
-  Knot alice_figure8 {
-    type: FIGURE_EIGHT_FOLLOW_THROUGH
-    with: rope.first_end
-    on: alice.harness.hardpoints
-  }
-
-  Knot barrel {
-    type: BARREL
-    with: rope.second_end
-  }
-
-  Carabiner belay_locker {
-    type: LOCKING
-    clipped_to: [bob.harness.belay_loop, bobs_grigri]
-  }
-
-  var_0 = 2m
-  var_1 = 2
-  // var_2 = var_1 + var_1 // TODO: variable assignments visitor!
-
-  Attachment grigri_rope {
-    device: bobs_grigri
-    to: rope
-    active_side: rope.first_end
-    distance_to_end: 2 * 4m / 6 * 8 + 3m
-  }
-
-  // For now, let's assume all climbers have harness, helmet, shoes?
+Protection p1 {
+type: [Cam { size: #2 }]
 }
 
+Protection p2 {
+type: [Bolt]
+}
+
+Vector v1 {
+angle: 0deg
+length: 2 * 5m - 10m
+}
+
+Vector v2 {
+angle: -30deg
+length: (3m + 3m) / 2
+}
+
+Vector v3 {
+angle: 0deg
+length: 5m
+}
+
+Protection p3 {
+type: [
+  Bolt {
+    with: RapRing
+  },
+  Bolt {
+    with: RapRing
+  }
+]
+}
+
+Route lulu {
+length: 100ft // Shouldn't this be computed from protection?
+grade: 5.12b
+protection: [(p1, v1), (p2, v2), (p3, v3), (p2, v2), (p3, v3), (p2, v2), (p3, v3)]
+type: MIXED
+}
+
+lulu.name = 'Flesh for Lulu' // example of modifying attributes
+
+Climber alice {
+gear: [
+  Cam { size: #2 },
+  Draw { type: ALPINE_DRAW },
+  Draw,
+  Draw,
+  GriGri,
+  DyneemaSling { length: 240cm },
+  Carabiner { type: LOCKING },
+  Carabiner { type: LOCKING },
+  Carabiner { type: LOCKING }
+]
+}
+
+GriGri bobs_grigri
+
+Climber bob {
+gear: [bobs_grigri]
+}
+
+Rope rope {
+length: 60m + 10m
+rated: SINGLE
+}
+
+Knot alice_figure8 {
+type: FIGURE_EIGHT_FOLLOW_THROUGH
+with: rope
+on: alice
+}
+
+Knot barrel {
+type: BARREL
+with: rope
+}
+
+Carabiner belay_locker {
+type: LOCKING
+clipped_to: [bob, bobs_grigri]
+}
+
+var_0 = 2m
+var_1 = 2
+// var_2 = var_1 + var_1 // TODO: variable assignments visitor!
+
+Attachment grigri_rope {
+device: bobs_grigri
+to: rope
+active_side: rope.first_end
+distance_to_end: 2 * 4m / 6 * 8 + 3m
+}
+
+// For now, let's assume all climbers have harness, helmet, shoes?
+
 lulu_climbing_setup()
+display(lulu)
 
 test_func(1, 2, 3)

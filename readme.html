@@ -149,7 +149,6 @@ By primitive action we mean actions that are not composed of other actions.
 
 Grammar
 ================
-
 ~~~~
 grammar Lang;
 
@@ -344,104 +343,109 @@ Setting up the scenario to go climbing
 --------------------------------
 
 ~~~~
-define lulu_climbing_setup() {
-  // Protection { type: Bolt } <-- Example of anonymous object
+// Protection { type: Bolt } <-- Example of anonymous object
 
-  Protection p1 {
-    type: [Cam { size: #2 }]
-  }
-
-  Protection p2 {
-    type: [Bolt]
-  }
-
-  Vector v1 {
-    angle: 40deg
-    length: 5m
-  }
-
-  Vector v2 {
-    angle: -30deg
-    length: 3m
-  }
-
-  Vector v3 {
-    angle: 0deg
-    length: 5m
-  }
-
-  Protection p3 {
-    type: [
-      Bolt {
-        with: RapRing
-      },
-      Bolt {
-        with: RapRing
-      }
-    ]
-  }
-
-  Route lulu {
-    length: 100ft // Shouldn't this be computed from protection?
-    grade: 5.12b
-    protection: [(p1, v1), (p2, v2), (p3, v3)]
-    type: MIXED
-  }
-
-  lulu.name = 'Flesh for Lulu' // example of modifying attributes
-
-  Climber alice {
-    gear: [
-      Cam { size: #2 },
-      Draw { type: ALPINE_DRAW },
-      Draw,
-      Draw,
-      GriGri,
-      DyneemaSling { length: 240cm },
-      Carabiner { type: LOCKING },
-      Carabiner { type: LOCKING },
-      Carabiner { type: LOCKING }
-    ]
-  }
-
-  GriGri bobs_grigri
-
-  Climber bob {
-    gear: [bobs_grigri]
-  }
-
-  Rope rope {
-    length: 70m
-    rated: SINGLE
-  }
-
-  Knot alice_figure8 {
-    type: FIGURE_EIGHT_FOLLOW_THROUGH
-    with: rope.first_end
-    on: alice.harness.hardpoints
-  }
-
-  Knot barrel {
-    type: BARREL
-    with: rope.second_end
-  }
-
-  Carabiner belay_locker {
-    type: LOCKING
-    clipped_to: [bob.harness.belay_loop, bobs_grigri]
-  }
-
-  Attachment grigri_rope {
-    device: bobs_grigri
-    to: rope
-    active_side: rope.first_end
-    distance_to_end: 4m
-  }
-
-  // For now, let's assume all climbers have harness, helmet, shoes?
+Protection p1 {
+type: [Cam { size: #2 }]
 }
 
+Protection p2 {
+type: [Bolt]
+}
+
+Vector v1 {
+angle: 0deg
+length: 5m
+}
+
+Vector v2 {
+angle: -30deg
+length: 3m
+}
+
+Vector v3 {
+angle: 0deg
+length: 5m
+}
+
+Protection p3 {
+type: [
+Bolt {
+with: RapRing
+},
+Bolt {
+with: RapRing
+}
+]
+}
+
+Route lulu {
+length: 100ft // Shouldn't this be computed from protection?
+grade: 5.12b
+protection: [(p1, v1), (p2, v2), (p3, v3), (p2, v2), (p3, v3), (p2, v2), (p3, v3)]
+type: MIXED
+}
+
+lulu.name = 'Flesh for Lulu' // example of modifying attributes
+
+Climber alice {
+gear: [
+Cam { size: #2 },
+Draw { type: ALPINE_DRAW },
+Draw,
+Draw,
+GriGri,
+DyneemaSling { length: 240cm },
+Carabiner { type: LOCKING },
+Carabiner { type: LOCKING },
+Carabiner { type: LOCKING }
+]
+}
+
+GriGri bobs_grigri
+
+Climber bob {
+gear: [bobs_grigri]
+}
+
+Rope rope {
+length: 60m + 10m
+rated: SINGLE
+}
+
+Knot alice_figure8 {
+type: FIGURE_EIGHT_FOLLOW_THROUGH
+with: rope
+on: alice
+}
+
+Knot barrel {
+type: BARREL
+with: rope
+}
+
+Carabiner belay_locker {
+type: LOCKING
+clipped_to: [bob, bobs_grigri]
+}
+
+var_0 = 2m
+var_1 = 2
+// var_2 = var_1 + var_1 // TODO: variable assignments visitor!
+
+Attachment grigri_rope {
+device: bobs_grigri
+to: rope
+active_side: rope.first_end
+distance_to_end: 2 * 4m / 6 * 8 + 3m
+}
+
+// For now, let's assume all climbers have harness, helmet, shoes?
+
 lulu_climbing_setup()
+display(lulu)
+
+test_func(1, 2, 3)
 ~~~~
 
 A follower is climbing up 
@@ -763,6 +767,167 @@ too_hard = 5.16a
 same_thing = FRENCH 9c+
 too_easy = 2nd
 ~~~~
+
+Translation
+=============
+We were able to achieve proper translation of most of the defined grammar.
+We were only able to achieve limited output given said inputs however.
+Below is the produced route using javafx functionality that correctly
+displays the inputed protection types (signified by the different icons at the
+vertex points), distance of rope between vertices, and angles in degrees.
+![A route being displayed on climbing-setup.rock](route.png width="600px")
+
+Component descrpitions
+===============
+
+Objects
+------------------
+
+> Angle.java - defines an angle class to handle conversion of angle (in deg) as a string to angle as an int 
+- public Angle(String input){} - constructor, stores string and int form of an angle
+- public int getAngle(){} - getter for int version of angle
+
+> CamSize.java - defines CamSizes for handling of climbing protection on trad routes.
+- private static final Map<String, CamSize> MAP - defines map of string input to object CamSizes
+- public static CamSize fromName(String name) {} - gets camsize from camname in input using map created above
+
+> ClimbingObject.java - defines general object for all 'climbing objects' defined in grammar, maps object name to attribute list
+- Holds string (type of object) and map (attribute list)
+- public ClimbingObject(String type, Map<String, Object> attributes) {} - general constructor
+- @Override public String toString(){} - returns string form of object as name
+
+> Constant.java - defines object for handling all 'constants' defined in grammar.
+- Class is divided into categories for handling typings, each category defines one method which returns 'name' of const as string
+- Categories are: Routestyle (MIXED, TRAD, SPORT), RopeRating (SINGLE, TAG_LINE, HALF, TWIN, DOUBLE;), AnchorSystem (QUAD, SLIDING_X, W_ANCHOR;), DrawType (ALPINE_DRAW, SPORT_DRAW;),
+CarabinerType (LOCKING, NON_LOCKING;), Bend (DOUBLE_FISHERMAN, TRIPLE_FISHERMAN, FLAT_OVERHAND, FLEMISH;), Hitch (CLOVE, PRUSIK, AUTOBLOCK, KLEMHEIST, MUNTER;), 
+OtherKnot (TANGLE;).
+- Categories and their terminals based on LANG grammar defined in antlr
+
+> Grade.java - defines grade object for handling climbing grades and their conversions based on system
+- Grade has two hashmaps, one from french>yosemite and one for the opposite
+- Main method manually defines grade conversions in a hashmap and then forms the reverse map
+- public String getFrenchGrade(String yosemiteGrade) {} - returns french grade from a given yosemite grade string
+- public String getYosemiteGrade(String frenchGrade) {} - returns yosemite grade friom a given french grade string
+- public String getGrade() {} - returns grade string
+- public Grade(String input) {} - setter for grade
+
+> Length.java - defines a length object for handling length conversions, holds a double (length in meters)
+- public double getLengthInMeters() {} - getter for standard length in meters
+- public Length(String input) {} - constructor for length object, parses string input and converts it to meters.
+- public Length multiplyBy(double x) {} - multiple length by a double
+- public Length addBy(Length summand) {} - add length to a double
+- @Override public String toString() {} - return length as string
+
+> Route.java - defines a route object as a sub-object of climbing objects.
+- public Route(HashMap<String, Object> route) {} - borrow superconstructor from climbing object
+- public String getDanger() {} - returns the 'danger rating' of a route in PG, PG13, R, or X. Determined based on a calculation of how high a 
+fall is and whether or not the climber hits the ground at that height. Done by determining the distance between bolts and multiplying by 2 to
+determine rope distance. Deadly fall is selected at 49 ft based on average height of deadly fall (src: https://www.safeopedia.com/at-what-height-do-falls-become-deadly/7/7503#:~:text=The%20Greater%20the%20Height%2C%20the%20Greater%20the%20Danger&text=Other%20trauma%20studies%20seem%20to,only%20a%2010%25%20survival%20rate.)
+Deadly fall is X, slightly below is R, danger is PG13, sage is PG.
+- public void visualizeRoute() {} - takes all vectors from a route and sends them as a set to the ClimbingRouteVisualizer.java object, creates diagram
+for route viz.
+
+src code
+-------------
+> Visitor.java - defines an extended visitor class for visiting antlr grammar file
+- public static void main(String[] args) throws Exception {} - initializes visitor components and does error handling for false inputs
+- private Dictionary<String, Object> variables = new Hashtable<>() - tracks objects created from parsetree
+- @Override public Object visitRef_val(LangParser.Ref_valContext ctx) {} - creates climbing object upon visiting Ref_val in antlr parse tree. Returns object
+- @Override public Object visitFactor(LangParser.FactorContext ctx) {} - handles creation of other objects. If expression, parses and performs expression. If length, creates length object, if anything else converts to string.
+- @Override public Object visitTerm(LangParser.TermContext ctx) {} - handles term operations for math expressions
+- @Override public Object visitMath_expr(LangParser.Math_exprContext ctx) {} - handles math expressions more broadly
+- @Override public Object visitExpr_seq(LangParser.Expr_seqContext ctx) {} - creates Linked List from expr_seq
+- @Override public Object visitTuple(LangParser.TupleContext ctx) {} - default
+- @Override public Object visitList(LangParser.ListContext ctx) {} - default
+- @Override public Object visitFunc_call(LangParser.Func_callContext ctx) {} - visualizes route upon function call in grammar, otherwise handles ctx of func calls.
+- @Override public Object visitExpr(LangParser.ExprContext ctx) {} - handles all expression values explicitly, sends visitor to each expression.
+- @Override public Object visitDeclaration(LangParser.DeclarationContext ctx) {} - forms attribute lists and climbing objects based on class/attributes. Returns object
+
+> ClimbingRouteVisualizer.java - defines a visualizer to display diagram of climbing routes
+- private static double[][] vectors - defines array of array for list of vectors
+- public static void setVectors(double[][] inputVectors) {} - sets list of vectors
+- @Override public void start(Stage primaryStage) {} - creates canvas for drawing diagrams and adds lines for each vector to connect route
+- private void drawProtectionSymbol(GraphicsContext gc, double x, double y, int protectionType) {} - depending on type of protection (cam, bolt, anchor),
+draws a symbol to represent protection type
+- public static void main(String[] args) {} - launches drawing application with javafx
+
+antlr
+------------------
+> Lang.g4 - defines a grammar for a climbing language that handles objects, typing, attributes, and a 'code' style language for visualizing routes
+
+General Organization
+======================
+> Lang .g4 - grammar for climbing language
+> objects - objects for handling terminals and expr in grammar
+> src - Java code for parsing inputs and creating climbing diagram
+
+Notes
+=====================
+- The project emphasizes the power of antlr grammars in relation to the creation of new languages and handling operations within those languages
+- The creation of the climbing grammar was relatively fast and clean compared to our later work, though admittedly it took some trial and error when trying
+to make it generalizable
+- While the grammar itself works well, the translation to Java and its use cases feel a little clunky and make the grammar feel less appealing with how frusturating it can be
+to convert inputs parsed through antlr back to Java to create objects and use it in our diagram. In some ways, it feels like some sort of RDP would be easier just to make later tasks simpler even if
+its much easier to create the grammar itself in antlr which is consistent with how the uses of antlr have felt for much of the term.
+- Originally, we had debated whether to create objects for everything or nothing or somewhere in between. Eventually, we settled for using a few minor objects
+like Length/Grade/Angle to handle basic conversions and then using a more overarching object (ClimbingObject) for dealing with much of our grammar as we realized most
+things could be broken down into a type and an attribute list. We then used the subobject route to handle some of the more complex tasks related specifically to routes in our grammar.
+This system makes the antlr feel more useful while preventing needing to rewrite almost everything in Java.
+- We found visitors to be helpful more than listeners because of how simple they are to implement Java in based on when ctx for each aspect of our language is parsed.
+- We tested using a variety of inputs ranging in complexity (from 1 line/objects to large depictions of full routes) as well as with some 'bad' inputs that are rejected by our antlr grammar.
+
+Usage
+=================
+The primary usage of this program is to parse a new form of 'climbing language' inputs and determine 1. Their validity 2. What objects/items are involved in the climbing scenario 3. the safety of a route
+and 4. provide a diagram of what the route looks like. This is meant to provide a basis for more advanced programs related to how climbing systems work
+especially in relation to various routes.
+Areas of further effort and research include automated descriptions of human-readable climbing route descriptions and system descriptions based on automated inputs, as well
+as the creation of easier tools for displaying outputs to a user such that less coding knowledge/expertise is needed to use the program.
+
+DSL Comparison
+================
+General language: In comparison with generating our output with general language, I think there is a strong argument to be made that our DSL
+is more logical/easier to use. For one thing, the language makes it very easy to describe climbing scenarios and their associated objects in objective modular terms.
+It would be much more difficult to parse this input without using a DSL as an RDP would have to weed out far more edge cases and associated unacceptable examples more manually whereas antlr enables a 
+more automatic approach. The advantages to using our DSL are:
+1. Simplicity/readability
+2. Easy exportability to the creation of Java objects using visitors
+3. Fast and efficient parsing
+4. the ability to easily read in examples and scenarios of all different sizes and adapt to new information quickly without writing new code
+Using a language like Java or Python to do the same thing would lack many of the same capabilities as using simple objects like lists and dataframes wouldn't 
+convey categories, typings, or associations nearly as well as our DSL.
+
+By Hand: I think a stronger argument can be made that doing the operations described below by hand is more 'effective' than our computerized approach can entail.
+Ultimately, it would be true that describing a climbing route/scenario exactly with regular english instead of in our DSL is simpler and involves much more detail as their are Ultimately
+things our language can't really capture at the moment (because real-world scenarios involve tons of complexity). For instance, we haven't implemented methods to define route obstructions like ledges or bushes or 
+various forms of natural protection like trees or any system for protection quality (like rusted bolts or poor rock). All these things might be relative to a route though and therefore important if we were to discuss it in real life.
+
+That being said, the advantage of the DSL is that there are hundreds of thousands of climbing routes in just North America and it would be impossible to describe all of them in natural language with so much detail.
+Instead, using a DSL that can read in route information generated through forums and collective agreement on existent places like mountain project allows us to create semi-detailed descriptions automatically
+and convert them into useful knowledge about safety and with descriptions like the diagrams. As with many computer programs, doing something by hand may be 'better' but automation
+has a much wider scope which makes our DSL worthwhile.
+
+Work Distribution
+=================
+
+Project concept/initial writeup - Sebastian + Dylan
+Lang.g4 - All
+
+Objects:
+- Angle - 
+- CamSize - 
+- ClimbingObject - Sebastian.
+- Grade - Javi
+- Length - Dylan
+- Route - Sebastian + Walker
+
+SRC:
+- Visualizer - Walker
+- Listener - Dylan
+- Visitor - Dylan + Sebastian + Walker
+
+Inputs: Dylan + Sebastian (stuck-rope)
+Documentation - All (readme - Sebastian + Dylan)
 
 <!--   Feel free to modify the following to fit a theme of your choosing   -->
 <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet"> <!-- a sans-serif font -->

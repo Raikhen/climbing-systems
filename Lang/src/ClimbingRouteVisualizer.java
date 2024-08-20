@@ -37,7 +37,7 @@ public class ClimbingRouteVisualizer extends Application {
                 int protectionType = (int) vector[2]; // Protection type identifier
 
                 // Convert angle to radians
-                double angleRad = Math.toRadians(angle);
+                double angleRad = Math.toRadians(angle + 90);
 
                 // Calculate the end point of the vector
                 double newX = x + length * Math.cos(angleRad);
@@ -99,6 +99,7 @@ public class ClimbingRouteVisualizer extends Application {
                 gc.strokeLine(x + 5, y - 6, x - 5, y+6);
                 gc.setStroke(Color.RED);
                 gc.strokeOval(x-9, y, 18, 18); // Draw a red circle in the middle
+                gc.setStroke(Color.BLUE);
                 break;
             // Add more cases for other protection types
             default:
