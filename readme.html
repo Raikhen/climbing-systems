@@ -876,6 +876,133 @@ This system makes the antlr feel more useful while preventing needing to rewrite
 - We found visitors to be helpful more than listeners because of how simple they are to implement Java in based on when ctx for each aspect of our language is parsed.
 - We tested using a variety of inputs ranging in complexity (from 1 line/objects to large depictions of full routes) as well as with some 'bad' inputs that are rejected by our antlr grammar.
 
+Application Example
+=================
+
+A meaningful application example can be seen using the input:
+~~~~~
+/ Protection { type: Bolt } <-- Example of anonymous object
+
+Protection p1 {
+type: [Cam { size: #2 }]
+}
+
+Protection p2 {
+type: [Bolt]
+}
+
+Vector v1 {
+angle: 0deg
+length: 2 * 5m - 10m
+}
+
+Vector v2 {
+angle: -30deg
+length: (3m + 3m) / 2
+}
+
+Vector v3 {
+angle: 0deg
+length: 5m
+}
+
+Protection p3 {
+type: [
+  Bolt {
+    with: RapRing
+  },
+  Bolt {
+    with: RapRing
+  }
+]
+}
+
+Route lulu {
+length: 100ft // Shouldn't this be computed from protection?
+grade: 5.12b
+protection: [(p1, v1), (p2, v2), (p3, v3), (p2, v2), (p3, v3), (p2, v2), (p3, v3)]
+type: MIXED
+}
+
+lulu.name = 'Flesh for Lulu' // example of modifying attributes
+
+Climber alice {
+gear: [
+  Cam { size: #2 },
+  Draw { type: ALPINE_DRAW },
+  Draw,
+  Draw,
+  GriGri,
+  DyneemaSling { length: 240cm },
+  Carabiner { type: LOCKING },
+  Carabiner { type: LOCKING },
+  Carabiner { type: LOCKING }
+]
+}
+
+GriGri bobs_grigri
+
+Climber bob {
+gear: [bobs_grigri]
+}
+
+Rope rope {
+length: 60m + 10m
+rated: SINGLE
+}
+
+Knot alice_figure8 {
+type: FIGURE_EIGHT_FOLLOW_THROUGH
+with: rope
+on: alice
+}
+
+Knot barrel {
+type: BARREL
+with: rope
+}
+
+Carabiner belay_locker {
+type: LOCKING
+clipped_to: [bob, bobs_grigri]
+}
+
+var_0 = 2m
+var_1 = 2
+// var_2 = var_1 + var_1 // TODO: variable assignments visitor!
+
+Attachment grigri_rope {
+device: bobs_grigri
+to: rope
+active_side: rope.first_end
+distance_to_end: 2 * 4m / 6 * 8 + 3m
+}
+
+// For now, let's assume all climbers have harness, helmet, shoes?
+
+lulu_climbing_setup()
+display(lulu)
+
+test_func(1, 2, 3)
+~~~~~
+
+With this example we see various things that our DSL can account for:
+1. Route information detailing protection locations and their associated location vectors
+2. Scenario information about a climber and the objects they possess
+3. Rope information to assist our understanding of the scenario
+4. Additional miscellanous information
+
+This example is meaningful because it demonstrates the advantages of our DSL as opposed to other forms of communicating the same information.
+With our DSL, we can track information related to a variety of climbing objects in a succint manner that allows us to make a diagram of the route to visualize our systems,
+describe the systems we have and have ACCESS TO in detail (because we know what resources are available), and provide descriptions/depictions of a scenario in readable terms.
+With our DSL, we can take in objective information in a modular form passed by a user or created automatically for educational uses and eventually turn it into a 
+human readable form through diagrams and descriptions. Ultimately, our DSL makes the possible in pursuit of a variety of future goals and processes
+that can assist in climbing information presentation and safety systems.
+
+Validated input:
+------------------
+
+
 Usage
 =================
 The primary usage of this program is to parse a new form of 'climbing language' inputs and determine 1. Their validity 2. What objects/items are involved in the climbing scenario 3. the safety of a route
@@ -905,7 +1032,9 @@ various forms of natural protection like trees or any system for protection qual
 That being said, the advantage of the DSL is that there are hundreds of thousands of climbing routes in just North America and it would be impossible to describe all of them in natural language with so much detail.
 Instead, using a DSL that can read in route information generated through forums and collective agreement on existent places like mountain project allows us to create semi-detailed descriptions automatically
 and convert them into useful knowledge about safety and with descriptions like the diagrams. As with many computer programs, doing something by hand may be 'better' but automation
-has a much wider scope which makes our DSL worthwhile.
+has a much wider scope which makes our DSL worthwhile. Additionally, our DSL enables descriptions of climbing 'scenarios' in high detail and generalizable way to form a universal guide.
+The DSL looks to solve access issues to safety information in climbing (for those who don't have an inlet into the community or money for courses) and enables the creation
+of basic information given danger/risk calculations and objective understandings of climbing systems like anchors and protection.
 
 Work Distribution
 =================
